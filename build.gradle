@@ -22,6 +22,8 @@ repositories {
 addCucumberSuite "acceptance"
 
 acceptance{
+    group = "verification"
+    description = "Runs cucumber tests."
     stepDefinitionRoots = ['src/acceptance/groovy/com/trevorism/gcloud']
 }
 
