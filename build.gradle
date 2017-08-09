@@ -25,6 +25,10 @@ acceptance{
     group = "verification"
     description = "Runs cucumber tests."
     stepDefinitionRoots = ['src/acceptance/groovy/com/trevorism/gcloud']
+
+    doLast {
+        println "Done!"
+    }
 }
 
 def appengineVersion = "1.9.54"

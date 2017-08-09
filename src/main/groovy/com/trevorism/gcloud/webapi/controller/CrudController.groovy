@@ -21,7 +21,7 @@ class CrudController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getEndpoints(){
+    List<String> getEndpoints(){
         Query query = new Query(Entities.KIND_METADATA_KIND)
         def kindEntities = datastore.prepare(query).asIterable()
 
