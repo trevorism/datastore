@@ -8,6 +8,4 @@ class Arbitrary {
     Date date
     int number
     double decimal
-    List list
-    Map map
 }

@@ -17,6 +17,9 @@ group = "com.trevorism.gcloud"
 
 repositories {
 	mavenCentral()
+    flatDir {
+        dirs 'C:\\dev\\http-utils\\build\\libs'
+    }
 }
 
 addCucumberSuite "acceptance"
@@ -25,25 +28,25 @@ acceptance{
     group = "verification"
     description = "Runs cucumber tests."
     stepDefinitionRoots = ['src/acceptance/groovy/com/trevorism/gcloud']
-
-    doLast {
-        println "Done!"
-    }
 }
 
 def appengineVersion = "1.9.54"
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.12'
+
     compile "com.google.appengine:appengine-api-1.0-sdk:$appengineVersion"
 
     compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.22.2'
 	compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.22.2'
 	compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.7.3'
 
-    testCompile 'junit:junit:4.12'
-    acceptanceCompile 'info.cukes:cucumber-groovy:1.2.5'
 
+    acceptanceCompile 'info.cukes:cucumber-groovy:1.2.5'
+    acceptanceCompile ':http-utils:1.0.0'
+    acceptanceCompile 'org.apache.httpcomponents:httpclient:4.5.3'
+
+    testCompile 'junit:junit:4.12'
     testCompile "com.google.appengine:appengine-testing:$appengineVersion"
     testCompile "com.google.appengine:appengine-api-stubs:$appengineVersion"
     testCompile "com.google.appengine:appengine-api-labs:$appengineVersion"
