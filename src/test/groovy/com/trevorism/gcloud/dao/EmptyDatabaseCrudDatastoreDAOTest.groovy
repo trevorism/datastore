@@ -12,21 +12,21 @@ class EmptyDatabaseCrudDatastoreDAOTest extends LocalAppEngineTestBase {
     private final String kind = "TestSample"
 
     @Test
-    public void testReadAllFromEmptyDB() {
+    void testReadAllFromEmptyDB() {
         CrudDatastoreDAO dao = new CrudDatastoreDAO(kind)
         def results = dao.readAll()
         assert !results
     }
 
     @Test
-    public void testReadFromEmptyDB() {
+    void testReadFromEmptyDB() {
         CrudDatastoreDAO dao = new CrudDatastoreDAO(kind)
         def result = dao.read(1)
         assert !result
     }
 
     @Test
-    public void testUpdateFromEmptyDB() {
+    void testUpdateFromEmptyDB() {
         CrudDatastoreDAO dao = new CrudDatastoreDAO(kind)
         def jsonObject = ["name": "newName"]
         def result = dao.update(1, jsonObject)
@@ -34,14 +34,14 @@ class EmptyDatabaseCrudDatastoreDAOTest extends LocalAppEngineTestBase {
     }
 
     @Test
-    public void testDeleteFromEmptyDB() {
+    void testDeleteFromEmptyDB() {
         CrudDatastoreDAO dao = new CrudDatastoreDAO(kind)
         def result = dao.delete(1)
         !result
     }
 
     @Test
-    public void testCreateSimple() {
+    void testCreateSimple() {
         CrudDatastoreDAO dao = new CrudDatastoreDAO(kind)
         def jsonObject = [:]
         jsonObject.put("name", "newName")
@@ -59,8 +59,8 @@ class EmptyDatabaseCrudDatastoreDAOTest extends LocalAppEngineTestBase {
     }
 
     @Test
-    public void testCreateWithId() {
-        long id = 8;
+    void testCreateWithId() {
+        long id = 8
         CrudDatastoreDAO dao = new CrudDatastoreDAO(kind)
 
         def jsonObject = [:]
@@ -76,7 +76,7 @@ class EmptyDatabaseCrudDatastoreDAOTest extends LocalAppEngineTestBase {
     }
 
     @Test(expected = RuntimeException.class)
-    public void testCreateWithInvalidId() {
+    void testCreateWithInvalidId() {
         CrudDatastoreDAO dao = new CrudDatastoreDAO(kind)
 
         def jsonObject = [:]

@@ -13,12 +13,12 @@ abstract class LocalAppEngineTestBase {
     private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig())
 
     @Before
-    public void setUp() {
+    void setUp() {
         helper.setUp()
     }
 
     @After
-    public void tearDown() {
+    void tearDown() {
         helper.tearDown()
     }
 }
