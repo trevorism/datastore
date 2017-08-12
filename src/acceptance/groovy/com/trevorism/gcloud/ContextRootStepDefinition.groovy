@@ -5,6 +5,10 @@ this.metaClass.mixin(cucumber.api.groovy.EN)
 def contextRootContent
 def pingContent
 
+Given(~/^the datastore application is alive$/) { ->
+    new URL("http://datastore.trevorism.com/ping").text
+}
+
 When(~/^I navigate to "([^"]*)"$/) { String url ->
     contextRootContent = new URL(url).text
 }
