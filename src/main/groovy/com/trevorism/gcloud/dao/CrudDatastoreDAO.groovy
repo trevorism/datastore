@@ -41,7 +41,7 @@ class CrudDatastoreDAO implements DatastoreDAO {
         Key key = KeyFactory.createKey(kind, id)
         try{
             return datastore.get(key)
-        }catch(EntityNotFoundException enfe){
+        }catch(EntityNotFoundException ignored){
             return null
         }
     }
@@ -71,7 +71,7 @@ class CrudDatastoreDAO implements DatastoreDAO {
         Key key = KeyFactory.createKey(kind, id)
         Entity entity = read(id)
         if(!entity)
-            return null;
+            return null
         datastore.delete(key)
         return entity
     }
@@ -108,9 +108,7 @@ class CrudDatastoreDAO implements DatastoreDAO {
         try{
             if(jsonObject.containsKey("id"))
                 return Long.valueOf(jsonObject.get("id").toString())
-            return 0
-        }catch (Exception e){
-            return 0
-        }
+        }catch (Exception ignored){ }
+        return 0
     }
 }

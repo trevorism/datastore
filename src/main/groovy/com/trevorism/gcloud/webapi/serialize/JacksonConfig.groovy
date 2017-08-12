@@ -16,7 +16,7 @@ class JacksonConfig implements ContextResolver<ObjectMapper> {
 
     private final ObjectMapper objectMapper
 
-    public JacksonConfig() {
+    JacksonConfig() {
         objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
         objectMapper.setDateFormat(dateFormat)
@@ -24,7 +24,7 @@ class JacksonConfig implements ContextResolver<ObjectMapper> {
     }
 
     @Override
-    public ObjectMapper getContext(Class<?> type) {
+    ObjectMapper getContext(Class<?> type) {
         return objectMapper
     }
 }

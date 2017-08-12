@@ -32,9 +32,9 @@ class EntityModule extends SimpleModule{
         }
 
         @Override
-        public Class<Entity> handledType()
+        Class<Entity> handledType()
         {
-            return Entity.class;
+            return Entity.class
         }
 
     }

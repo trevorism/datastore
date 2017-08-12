@@ -15,7 +15,7 @@ class CreatedFilter implements ContainerResponseFilter {
 
 
     @Override
-    void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
+    void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
         responseContext.setStatus(Response.Status.CREATED.statusCode)
         String url = createLocationUrl(responseContext)
         responseContext.getHeaders().add("location", url)
