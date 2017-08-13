@@ -11,10 +11,8 @@ import org.junit.Test
  */
 class JacksonConfigTest extends LocalAppEngineTestBase{
 
-
-
     @Test
-    public void testEntitySerialization(){
+    void testEntitySerialization(){
         JacksonConfig jacksonConfig = new JacksonConfig()
         ObjectMapper mapper = jacksonConfig.getContext(null)
 

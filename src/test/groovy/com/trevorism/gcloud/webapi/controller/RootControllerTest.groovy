@@ -8,7 +8,6 @@ import org.junit.Test
  */
 class RootControllerTest extends LocalAppEngineTestBase{
 
-
     @Test
     void testRootController(){
         RootController rootController = new RootController()
