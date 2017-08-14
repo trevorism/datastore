@@ -61,6 +61,7 @@ dependencies {
 
 acceptance{
     stepDefinitionRoots = ['src/acceptance/groovy/com/trevorism/gcloud']
+    finalizedBy("sendAcceptanceTestEvents")
 }
 
 
