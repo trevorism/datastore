@@ -5,7 +5,7 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
         flatDir {
-            dirs ('C:\\dev\\gradle-acceptance-plugin\\build\\libs', 'C:\\dev\\eventhub-client\\build\\libs', 'C:\\dev\\http-utils\\build\\libs')
+            dirs ('C:\\dev\\gradle-acceptance-plugin\\build\\libs', 'C:\\dev\\gradle-gae-deploy-plugin\\build\\libs', 'C:\\dev\\eventhub-client\\build\\libs', 'C:\\dev\\http-utils\\build\\libs')
         }
     }
 	dependencies {
@@ -16,6 +16,7 @@ buildscript {
         classpath 'org.apache.httpcomponents:httpclient:4.5.3'
         classpath 'com.google.code.gson:gson:2.8.1'
         classpath ':gradle-acceptance-plugin:1.0'
+        classpath ':gradle-gae-deploy-plugin:1.0'
     }
 }
 
@@ -27,6 +28,7 @@ plugins {
 
 apply plugin: 'com.google.cloud.tools.appengine'
 apply plugin: "com.trevorism.gradle.acceptance"
+apply plugin: "com.trevorism.gradle.gae.deploy"
 
 version = "3"
 group = "com.trevorism.gcloud"
