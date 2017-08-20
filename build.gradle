@@ -66,6 +66,13 @@ acceptance{
     finalizedBy("sendAcceptanceTestEvents")
 }
 
+appengine{
+    deploy {
+        stopPreviousVersion = true
+        promote = true
+    }
+}
+
 check{
     dependsOn('jacocoTestReport')
 }
