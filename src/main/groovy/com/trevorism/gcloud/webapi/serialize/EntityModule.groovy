@@ -12,7 +12,7 @@ import com.google.appengine.api.datastore.Entity
  */
 class EntityModule extends SimpleModule{
 
-    public EntityModule(){
+    EntityModule(){
         addSerializer(Entity.class, new EntitySerializer())
     }
 

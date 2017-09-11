@@ -1,23 +1,18 @@
 package com.trevorism.gcloud.webapi.controller
 
-import com.google.appengine.api.datastore.DatastoreService
-import com.google.appengine.api.datastore.DatastoreServiceFactory
-import com.google.appengine.api.datastore.Entities
-import com.google.appengine.api.datastore.Entity
-import com.google.appengine.api.datastore.Query
+import com.google.appengine.api.datastore.*
 import com.trevorism.gcloud.dao.CrudDatastoreDAO
 import com.trevorism.gcloud.dao.DatastoreDAO
 import com.trevorism.gcloud.webapi.filter.Created
+import com.trevorism.secure.Secure
 
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.Response
 
 @Path("api")
 class CrudController {
 
     private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService()
-
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -57,6 +52,7 @@ class CrudController {
 
 
     @POST
+    @Secure
     @Path("{kind}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -69,6 +65,7 @@ class CrudController {
     }
 
     @PUT
+    @Secure
     @Path("{kind}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -82,6 +79,7 @@ class CrudController {
     }
 
     @DELETE
+    @Secure
     @Path("{kind}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     Entity delete(@PathParam("kind") String kind, @PathParam("id") long id){
