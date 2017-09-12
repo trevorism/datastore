@@ -18,7 +18,7 @@ class LoggingRequestFilter implements ContainerRequestFilter{
         if(correlationId)
             output = "${correlationId}: "
 
-        log.info("${output}Received a ${requestContext.getMethod()} request at ${requestContext.getUriInfo().path}")
+        log.info("${output}Received a ${requestContext.getMethod()} request at ${requestContext.requestUri}")
 
     }
 }

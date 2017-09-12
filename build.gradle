@@ -75,6 +75,7 @@ acceptance{
 
 appengine{
     deploy {
+        project = "trevorism-gcloud"
         stopPreviousVersion = true
         promote = true
     }
