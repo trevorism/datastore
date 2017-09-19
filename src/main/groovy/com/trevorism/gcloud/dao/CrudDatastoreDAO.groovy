@@ -1,6 +1,7 @@
 package com.trevorism.gcloud.dao
 
 import com.google.appengine.api.datastore.*
+import com.google.appengine.repackaged.com.google.gson.Gson
 
 /**
  * @author tbrooks
@@ -9,9 +10,11 @@ class CrudDatastoreDAO implements DatastoreDAO {
 
     private final DatastoreService datastore
     private final String kind
+    private final Gson gson
 
     CrudDatastoreDAO(String kind){
         this.kind = kind.toLowerCase()
+        this.gson = new Gson()
         datastore = DatastoreServiceFactory.getDatastoreService()
     }
 
@@ -83,6 +86,9 @@ class CrudDatastoreDAO implements DatastoreDAO {
 
     private Entity setEntityProperties(Entity entity, Map<String, Object> data) {
         data.each { k, v ->
+            if(v instanceof List || v instanceof Map){
+                v = gson.toJson(v)
+            }
             entity.setIndexedProperty(k.toLowerCase(), v)
         }
         return entity
