@@ -13,7 +13,6 @@ buildscript {
     }
 	dependencies {
         classpath 'com.google.cloud.tools:appengine-gradle-plugin:1.3.2'
-        classpath "com.commercehub:gradle-cucumber-jvm-plugin:0.11"
         classpath 'com.trevorism:eventhub-client:1.0.0'
         classpath 'com.trevorism:http-utils:1.0.0'
         classpath 'com.trevorism.secure:secure-utils:1.0.0'
