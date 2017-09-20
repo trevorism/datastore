@@ -1,7 +1,9 @@
 package com.trevorism.gcloud.dao
 
 import com.google.appengine.api.datastore.*
-import com.google.appengine.repackaged.com.google.gson.Gson
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+
 
 /**
  * @author tbrooks
@@ -14,7 +16,7 @@ class CrudDatastoreDAO implements DatastoreDAO {
 
     CrudDatastoreDAO(String kind){
         this.kind = kind.toLowerCase()
-        this.gson = new Gson()
+        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create();
         datastore = DatastoreServiceFactory.getDatastoreService()
     }
 

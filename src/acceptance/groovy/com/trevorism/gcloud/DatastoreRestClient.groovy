@@ -1,10 +1,12 @@
 package com.trevorism.gcloud
 
+
 import com.trevorism.http.headers.HeadersHttpClient
 import com.trevorism.http.headers.HeadersJsonHttpClient
 import com.trevorism.http.util.ResponseUtils
 import com.trevorism.secure.PasswordProvider
 import gherkin.deps.com.google.gson.Gson
+import gherkin.deps.com.google.gson.GsonBuilder
 import gherkin.deps.com.google.gson.reflect.TypeToken
 
 /**
@@ -13,7 +15,7 @@ import gherkin.deps.com.google.gson.reflect.TypeToken
 class DatastoreRestClient {
 
     HeadersHttpClient client = new HeadersJsonHttpClient()
-    Gson gson = new Gson()
+    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create()
     PasswordProvider passwordProvider = new PasswordProvider()
 
     Arbitrary store(def arbitrary){
