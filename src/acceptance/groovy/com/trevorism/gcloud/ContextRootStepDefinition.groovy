@@ -28,6 +28,6 @@ Then(~/^the API returns a link to the help page$/) { ->
     assert contextRootContent.contains("/help")
 }
 
-Then(~/^the API returns a link to the help page$/) { ->
+Then(~/^pong is returned, to indicate the service is alive$/) { ->
     assert pingContent == "pong"
 }
