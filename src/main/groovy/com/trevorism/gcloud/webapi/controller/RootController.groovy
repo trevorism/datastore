@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response
 @SwaggerDefinition(
         info = @Info(
                 description = "CRUD operations on objects",
-                version = "Version: 1",
+                version = "1",
                 title = "Datastore API",
                 contact = @Contact(
                         name = "Trevor Brooks",
