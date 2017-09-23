@@ -4,12 +4,12 @@ Feature: Context Root of Datastore
   Scenario: ContextRoot
     Given the datastore application is alive
     When I navigate to "http://datastore.trevorism.com"
-    Then the API returns an array, letting me know where I can go next
+    Then the API returns a link to the help page
 
   Scenario: ContextRoot on app engine
     Given the datastore application is alive
     When I navigate to "https://trevorism-gcloud.appspot.com"
-    Then the API returns an array, letting me know where I can go next
+    Then the API returns a link to the help page
 
   Scenario: Ping
     Given the datastore application is alive

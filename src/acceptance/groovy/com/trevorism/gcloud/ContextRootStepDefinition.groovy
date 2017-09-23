@@ -23,11 +23,11 @@ When(~/^I navigate to \/ping on "([^"]*)"$/) { String url ->
     pingContent = new URL("${url}/ping").text
 }
 
-Then(~/^the API returns an array, letting me know where I can go next$/) { ->
+Then(~/^the API returns a link to the help page$/) { ->
     assert contextRootContent
-    assert contextRootContent == '["ping","help","api"]'
+    assert contextRootContent.contains("/help")
 }
 
-Then(~/^pong is returned, to indicate the service is alive$/) { ->
+Then(~/^the API returns a link to the help page$/) { ->
     assert pingContent == "pong"
 }

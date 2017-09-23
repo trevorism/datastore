@@ -1,7 +1,12 @@
-# gcloud
-CRUD operations on any object using google datastore. These objects are not type safe at this time.
+# Datastore
+CRUD operations on objects via a REST API.
 
-Note: The acceptance tests have a dependency on [http-utils](https://github.com/trevorism/http-utils)
+Objects have the following rules:
+* Must have an omitted, String, or long 'id' parameter
+* Can contain strings, numbers, dates, lists, and maps
+* Lists can contain other objects, as long as they conform to the above rules
+
+Any operation that costs $$ is secured. You'll need to authorize the request to use it.
 
 Deployed at [Datastore](datastore.trevorism.com)
 

@@ -6,18 +6,20 @@ import com.trevorism.gcloud.dao.DatastoreDAO
 import com.trevorism.gcloud.webapi.filter.Created
 import com.trevorism.secure.Secure
 import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import java.util.logging.Logger
 
-@Api
+@Api("CRUD Operations")
 @Path("api")
 class CrudController {
 
     private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService()
     private static final Logger log = Logger.getLogger(CrudController.class.name)
 
+    @ApiOperation(value = "Get all types")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     List<String> getEndpoints(){
@@ -33,6 +35,7 @@ class CrudController {
         return endpoints
     }
 
+    @ApiOperation(value = "Get an object of type {kind} with id {id}")
     @GET
     @Path("{kind}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -45,6 +48,7 @@ class CrudController {
         return entity
     }
 
+    @ApiOperation(value = "Get all objects of type {kind}")
     @GET
     @Path("{kind}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -55,6 +59,7 @@ class CrudController {
     }
 
 
+    @ApiOperation(value = "Create an object of type {kind} **Secure")
     @POST
     @Secure
     @Path("{kind}")
@@ -72,6 +77,7 @@ class CrudController {
         }
     }
 
+    @ApiOperation(value = "Update an object of type {kind} with id {id} **Secure")
     @PUT
     @Secure
     @Path("{kind}/{id}")
@@ -86,6 +92,7 @@ class CrudController {
 
     }
 
+    @ApiOperation(value = "Delete an object of type {kind} with id {id} **Secure")
     @DELETE
     @Secure
     @Path("{kind}/{id}")
