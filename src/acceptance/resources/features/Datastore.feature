@@ -23,3 +23,9 @@ Feature: Crud on an object
      And the object is created
      When every object in the list is deleted
      Then no objects will exist when listing all objects
+
+  Scenario: An invalid object throws an error
+    Given the datastore application is alive
+    And an invalid test object is defined
+    When the invalid test object is created
+    Then an error is thrown, indicating the failure

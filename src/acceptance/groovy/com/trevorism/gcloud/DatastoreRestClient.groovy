@@ -18,6 +18,12 @@ class DatastoreRestClient {
     Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create()
     PasswordProvider passwordProvider = new PasswordProvider()
 
+    def attemptToStoreInvalid(def invalid){
+        String json = gson.toJson(invalid)
+        String responseJson = ResponseUtils.getEntity client.post("http://datastore.trevorism.com/api/test",json, ["Authorization":passwordProvider.password])
+        return responseJson
+    }
+
     Arbitrary store(def arbitrary){
         String json = gson.toJson(arbitrary)
         String responseJson = ResponseUtils.getEntity client.post("http://datastore.trevorism.com/api/test",json, ["Authorization":passwordProvider.password])

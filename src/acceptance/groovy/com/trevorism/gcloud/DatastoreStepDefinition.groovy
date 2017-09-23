@@ -8,12 +8,27 @@ Arbitrary createdArbitrary
 Arbitrary updatedArbitrary
 DatastoreRestClient restClient = new DatastoreRestClient()
 
+InvalidId invalid
+def invalidResultJson
+
 Given(~/^a test object is defined$/) { ->
     initialArbitrary = new Arbitrary(date: new Date(), number: 5, decimal: 4.2)
 }
 
 Given(~/^the object is created$/) { ->
     createdArbitrary = restClient.store(initialArbitrary)
+}
+
+Given(~/^an invalid test object is defined$/) { ->
+    invalid = new InvalidId([id:true, name:"not valid" ])
+}
+
+When(~/^the invalid test object is created$/) { ->
+    invalidResultJson = restClient.attemptToStoreInvalid(invalid)
+}
+
+Then(~/^an error is thrown, indicating the failure$/) { ->
+    assert invalidResultJson.contains("Error")
 }
 
 Then(~/^the object can found by listing all objects$/) { ->

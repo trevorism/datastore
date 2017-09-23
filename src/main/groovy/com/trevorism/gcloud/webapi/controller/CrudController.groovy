@@ -8,11 +8,13 @@ import com.trevorism.secure.Secure
 
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
+import java.util.logging.Logger
 
 @Path("api")
 class CrudController {
 
     private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService()
+    private static final Logger log = Logger.getLogger(CrudController.class.name)
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,10 +60,14 @@ class CrudController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Created
     Entity create(@PathParam("kind") String kind, Map<String, Object> data){
-        DatastoreDAO dao = new CrudDatastoreDAO(kind)
-        def entity = dao.create(data)
-        return entity
-
+        try {
+            DatastoreDAO dao = new CrudDatastoreDAO(kind)
+            def entity = dao.create(data)
+            return entity
+        }catch (Exception e){
+            log.severe("Unable to create ${kind} object: ${data}")
+            throw new BadRequestException(e)
+        }
     }
 
     @PUT
