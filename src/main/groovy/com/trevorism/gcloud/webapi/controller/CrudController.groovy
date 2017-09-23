@@ -5,11 +5,13 @@ import com.trevorism.gcloud.dao.CrudDatastoreDAO
 import com.trevorism.gcloud.dao.DatastoreDAO
 import com.trevorism.gcloud.webapi.filter.Created
 import com.trevorism.secure.Secure
+import io.swagger.annotations.Api
 
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import java.util.logging.Logger
 
+@Api
 @Path("api")
 class CrudController {
 
