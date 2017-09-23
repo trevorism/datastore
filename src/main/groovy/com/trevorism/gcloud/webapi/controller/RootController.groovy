@@ -43,7 +43,7 @@ class RootController {
 
     @ApiOperation(value = "Context root of the application")
     @GET
-    String displayLink(){
+    String displayHelpLink(){
         '<h1>Datastore API</h1><br/>Visit the help page at <a href="/help">/help'
     }
 
