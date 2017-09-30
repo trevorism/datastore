@@ -3,6 +3,7 @@ CRUD operations on objects via a REST API.
 
 Objects have the following rules:
 * Must have an omitted, String, or long 'id' parameter
+* The id parameter must be numeric
 * Can contain strings, numbers, dates, lists, and maps
 * Lists can contain other objects, as long as they conform to the above rules
 

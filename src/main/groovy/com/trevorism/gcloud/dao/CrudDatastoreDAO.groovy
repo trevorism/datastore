@@ -4,6 +4,8 @@ import com.google.appengine.api.datastore.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 
+import javax.ws.rs.BadRequestException
+
 
 /**
  * @author tbrooks
@@ -37,7 +39,7 @@ class CrudDatastoreDAO implements DatastoreDAO {
         try{
             Long.parseLong(id.toString())
         }catch(Exception e){
-            throw new RuntimeException("Invalid ID. ID must be a number: ${id}", e)
+            throw new BadRequestException("Invalid ID. ID must be a number instead of: ${id}", e)
         }
     }
 

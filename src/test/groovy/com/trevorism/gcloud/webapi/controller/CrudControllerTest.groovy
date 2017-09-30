@@ -4,6 +4,8 @@ import com.google.appengine.api.datastore.Entity
 import com.trevorism.gcloud.LocalAppEngineTestBase
 import org.junit.Test
 
+import javax.ws.rs.NotFoundException
+
 /**
  * @author tbrooks
  */
@@ -12,12 +14,12 @@ class CrudControllerTest extends LocalAppEngineTestBase {
     private static final String KIND = "Test"
 
     @Test
-    void testRootController(){
+    void testRootController() {
         assert !(new CrudController().endpoints)
     }
 
     @Test
-    void testCreateReadDelete(){
+    void testCreateReadDelete() {
         CrudController crudController = new CrudController()
         Date now = new Date()
 
@@ -34,7 +36,7 @@ class CrudControllerTest extends LocalAppEngineTestBase {
     }
 
     @Test
-    void testCreateUpdateReadDelete(){
+    void testCreateUpdateReadDelete() {
         CrudController crudController = new CrudController()
         Date now = new Date()
 
@@ -51,7 +53,7 @@ class CrudControllerTest extends LocalAppEngineTestBase {
     }
 
     @Test
-    void testCreateReadAllDelete(){
+    void testCreateReadAllDelete() {
         CrudController crudController = new CrudController()
         Date now = new Date()
 
@@ -65,6 +67,18 @@ class CrudControllerTest extends LocalAppEngineTestBase {
         assertTestEntity(deletedEntity, now)
 
         assert !crudController.readAll(KIND)
+    }
+
+    @Test(expected = NotFoundException)
+    void testMissingGet() {
+        CrudController crudController = new CrudController()
+        crudController.read(KIND, 1234)
+    }
+
+    @Test(expected = NotFoundException)
+    void testMissingUpdate() {
+        CrudController crudController = new CrudController()
+        crudController.update(KIND, 1234, [:])
     }
 
     private static void assertTestEntity(Entity entity, Date date) {

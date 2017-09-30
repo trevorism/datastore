@@ -72,7 +72,7 @@ class CrudController {
             def entity = dao.create(data)
             return entity
         }catch (Exception e){
-            log.severe("Unable to create ${kind} object: ${data}")
+            log.severe("Unable to create ${kind} object: ${data} :: ${e.getMessage()}")
             throw new BadRequestException(e)
         }
     }
