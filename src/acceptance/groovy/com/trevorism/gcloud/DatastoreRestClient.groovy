@@ -20,36 +20,36 @@ class DatastoreRestClient {
 
     def attemptToStoreInvalid(def invalid){
         String json = gson.toJson(invalid)
-        String responseJson = ResponseUtils.getEntity client.post("http://datastore.trevorism.com/api/test",json, ["Authorization":passwordProvider.password])
+        String responseJson = ResponseUtils.getEntity client.post("https://datastore.trevorism.com/api/test",json, ["Authorization":passwordProvider.password])
         return responseJson
     }
 
     Arbitrary store(def arbitrary){
         String json = gson.toJson(arbitrary)
-        String responseJson = ResponseUtils.getEntity client.post("http://datastore.trevorism.com/api/test",json, ["Authorization":passwordProvider.password])
+        String responseJson = ResponseUtils.getEntity client.post("https://datastore.trevorism.com/api/test",json, ["Authorization":passwordProvider.password])
         gson.fromJson(responseJson, Arbitrary)
     }
 
     List<Arbitrary> list(){
-        String listJson = ResponseUtils.getEntity client.get("http://datastore.trevorism.com/api/test", ["Authorization":passwordProvider.password])
+        String listJson = ResponseUtils.getEntity client.get("https://datastore.trevorism.com/api/test", ["Authorization":passwordProvider.password])
         return gson.fromJson(listJson, new TypeToken<List<Arbitrary>>(){}.getType())
     }
 
     Arbitrary get(String id){
-        String json = ResponseUtils.getEntity client.get("http://datastore.trevorism.com/api/test/${id}", ["Authorization":passwordProvider.password])
+        String json = ResponseUtils.getEntity client.get("https://datastore.trevorism.com/api/test/${id}", ["Authorization":passwordProvider.password])
 
         return gson.fromJson(json, Arbitrary)
     }
 
     Arbitrary delete(String id){
-        String json = ResponseUtils.getEntity client.delete("http://datastore.trevorism.com/api/test/${id}", ["Authorization":passwordProvider.password])
+        String json = ResponseUtils.getEntity client.delete("https://datastore.trevorism.com/api/test/${id}", ["Authorization":passwordProvider.password])
 
         return gson.fromJson(json, Arbitrary)
     }
 
     Arbitrary put(String id, Arbitrary arbitrary){
         String json = gson.toJson(arbitrary)
-        String responseJson = ResponseUtils.getEntity client.put("http://datastore.trevorism.com/api/test/${id}",json, ["Authorization":passwordProvider.password])
+        String responseJson = ResponseUtils.getEntity client.put("https://datastore.trevorism.com/api/test/${id}",json, ["Authorization":passwordProvider.password])
         return gson.fromJson(responseJson, Arbitrary)
     }
 }
