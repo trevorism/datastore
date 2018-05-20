@@ -11,3 +11,12 @@ Any operation that costs $$ is secured. You'll need to authorize the request to 
 
 Deployed at [Datastore](datastore.trevorism.com)
 
+## Backups
+```
+$Bucket = "gs://trevorism-gcloud-backup"
+gcloud config set project trevorism-gcloud
+gcloud datastore export $Bucket
+
+-or-
+gcloud datastore export --kinds="KIND1,KIND2" $Bucket
+```
