@@ -1,4 +1,12 @@
 # Datastore
+![Jenkins](https://img.shields.io/jenkins/build/http/trevorism-build.eastus.cloudapp.azure.com/datastore)
+![Jenkins Coverage](https://img.shields.io/jenkins/coverage/jacoco/http/trevorism-build.eastus.cloudapp.azure.com/datastore)
+![GitHub last commit](https://img.shields.io/github/last-commit/trevorism/datastore)
+![GitHub language count](https://img.shields.io/github/languages/count/trevorism/datastore)
+![GitHub top language](https://img.shields.io/github/languages/top/trevorism/datastore)
+
+Latest Version: 1.1.0
+
 CRUD operations on objects via a REST API.
 
 Objects have the following rules:

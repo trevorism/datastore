@@ -9,7 +9,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.google.cloud.tools:appengine-gradle-plugin:1.3.4'
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.1.0'
         classpath 'com.trevorism:gradle-acceptance-plugin:1.3.4'
         classpath 'com.trevorism:gradle-gae-deploy-plugin:1.1.1'
         classpath 'com.trevorism:gradle-release-plugin:0.3.0'
@@ -34,8 +34,8 @@ repositories {
     }
 }
 
-def appengineVersion = "1.9.64"
-def jerseyVersion = "2.27"
+def appengineVersion = "1.9.76"
+def jerseyVersion = "2.29.1"
 
 
 dependencies {
@@ -46,15 +46,15 @@ dependencies {
     compile "org.glassfish.jersey.containers:jersey-container-servlet:$jerseyVersion"
     compile "org.glassfish.jersey.media:jersey-media-json-jackson:$jerseyVersion"
     compile "org.glassfish.jersey.inject:jersey-hk2:$jerseyVersion"
-    compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.9.5'
-    compile 'com.trevorism:secure-utils:1.0.1'
-    compile 'com.google.code.gson:gson:2.8.5'
+    compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.10.0'
+    compile 'com.trevorism:secure-utils:1.0.2'
+    compile 'com.google.code.gson:gson:2.8.6'
 
-    compile 'io.swagger:swagger-jersey2-jaxrs:1.5.20'
+    compile 'io.swagger:swagger-jersey2-jaxrs:1.5.23'
 
     acceptanceCompile 'info.cukes:cucumber-groovy:1.2.5'
-    acceptanceCompile 'com.trevorism:http-utils:1.0.1'
-    acceptanceCompile 'org.apache.httpcomponents:httpclient:4.5.5'
+    acceptanceCompile 'com.trevorism:http-utils:1.0.2'
+    acceptanceCompile 'org.apache.httpcomponents:httpclient:4.5.10'
 
     testCompile 'junit:junit:4.12'
     testCompile "com.google.appengine:appengine-testing:$appengineVersion"
@@ -70,8 +70,8 @@ acceptance{
 
 appengine{
     deploy {
-        project = "trevorism-gcloud"
-        version = "1"
+        projectId = "trevorism-gcloud"
+        version = "1-1-0"
         stopPreviousVersion = true
         promote = true
     }
