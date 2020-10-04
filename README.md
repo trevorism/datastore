@@ -17,7 +17,7 @@ Objects have the following rules:
 
 Any operation that costs $$ is secured. You'll need to authorize the request to use it.
 
-Deployed at [Datastore](datastore.trevorism.com)
+Deployed at [Datastore](https://datastore.trevorism.com)
 
 ## Backups
 ```
