@@ -39,16 +39,16 @@ def jerseyVersion = "2.31"
 
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.5.8'
+    implementation 'org.codehaus.groovy:groovy-all:2.5.8'
 
-    compile "com.google.appengine:appengine-api-1.0-sdk:$appengineVersion"
+    implementation "com.google.appengine:appengine-api-1.0-sdk:$appengineVersion"
 
-    compile "org.glassfish.jersey.containers:jersey-container-servlet:$jerseyVersion"
-    compile "org.glassfish.jersey.media:jersey-media-json-jackson:$jerseyVersion"
-    compile "org.glassfish.jersey.inject:jersey-hk2:$jerseyVersion"
-    compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.11.3'
-    compile 'com.trevorism:secure-utils:3.3.0'
-    compile 'com.google.code.gson:gson:2.8.6'
+    implementation "org.glassfish.jersey.containers:jersey-container-servlet:$jerseyVersion"
+    implementation "org.glassfish.jersey.media:jersey-media-json-jackson:$jerseyVersion"
+    implementation "org.glassfish.jersey.inject:jersey-hk2:$jerseyVersion"
+    implementation 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.11.3'
+    implementation 'com.trevorism:secure-utils:3.3.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     implementation 'org.slf4j:slf4j-nop:1.7.30'
     implementation 'io.swagger:swagger-jersey2-jaxrs:1.6.2'
