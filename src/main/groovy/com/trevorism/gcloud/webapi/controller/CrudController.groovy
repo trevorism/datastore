@@ -4,6 +4,7 @@ import com.google.appengine.api.datastore.*
 import com.trevorism.gcloud.dao.CrudDatastoreDAO
 import com.trevorism.gcloud.dao.DatastoreDAO
 import com.trevorism.gcloud.webapi.filter.Created
+import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -21,6 +22,7 @@ class CrudController {
 
     @ApiOperation(value = "Get all types")
     @GET
+    @Secure(Roles.SYSTEM)
     @Produces(MediaType.APPLICATION_JSON)
     List<String> getEndpoints(){
         Query query = new Query(Entities.KIND_METADATA_KIND)
@@ -37,6 +39,7 @@ class CrudController {
 
     @ApiOperation(value = "Get an object of type {kind} with id {id}")
     @GET
+    @Secure(Roles.SYSTEM)
     @Path("{kind}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     Entity read(@PathParam("kind") String kind, @PathParam("id") long id){
@@ -50,6 +53,7 @@ class CrudController {
 
     @ApiOperation(value = "Get all objects of type {kind}")
     @GET
+    @Secure(Roles.SYSTEM)
     @Path("{kind}")
     @Produces(MediaType.APPLICATION_JSON)
     List<Entity> readAll(@PathParam("kind") String kind){
@@ -61,7 +65,7 @@ class CrudController {
 
     @ApiOperation(value = "Create an object of type {kind} **Secure")
     @POST
-    @Secure
+    @Secure(Roles.SYSTEM)
     @Path("{kind}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -79,7 +83,7 @@ class CrudController {
 
     @ApiOperation(value = "Update an object of type {kind} with id {id} **Secure")
     @PUT
-    @Secure
+    @Secure(Roles.SYSTEM)
     @Path("{kind}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -94,7 +98,7 @@ class CrudController {
 
     @ApiOperation(value = "Delete an object of type {kind} with id {id} **Secure")
     @DELETE
-    @Secure
+    @Secure(Roles.SYSTEM)
     @Path("{kind}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     Entity delete(@PathParam("kind") String kind, @PathParam("id") long id){

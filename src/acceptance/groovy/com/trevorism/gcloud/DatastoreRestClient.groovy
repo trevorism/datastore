@@ -16,7 +16,7 @@ class DatastoreRestClient {
 
     HeadersHttpClient client = new HeadersJsonHttpClient()
     Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create()
-    PasswordProvider passwordProvider = new PasswordProvider()
+    PasswordProvider passwordProvider = PasswordProvider.instance
 
     def attemptToStoreInvalid(def invalid){
         String json = gson.toJson(invalid)
