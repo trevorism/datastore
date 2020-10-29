@@ -22,7 +22,6 @@ class CrudController {
 
     @ApiOperation(value = "Get all types")
     @GET
-    @Secure(Roles.SYSTEM)
     @Produces(MediaType.APPLICATION_JSON)
     List<String> getEndpoints(){
         Query query = new Query(Entities.KIND_METADATA_KIND)
@@ -39,7 +38,7 @@ class CrudController {
 
     @ApiOperation(value = "Get an object of type {kind} with id {id}")
     @GET
-    @Secure(Roles.SYSTEM)
+    @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{kind}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     Entity read(@PathParam("kind") String kind, @PathParam("id") long id){
@@ -53,7 +52,7 @@ class CrudController {
 
     @ApiOperation(value = "Get all objects of type {kind}")
     @GET
-    @Secure(Roles.SYSTEM)
+    @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{kind}")
     @Produces(MediaType.APPLICATION_JSON)
     List<Entity> readAll(@PathParam("kind") String kind){
@@ -65,7 +64,7 @@ class CrudController {
 
     @ApiOperation(value = "Create an object of type {kind} **Secure")
     @POST
-    @Secure(Roles.SYSTEM)
+    @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{kind}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
