@@ -82,7 +82,7 @@ class CrudController {
 
     @ApiOperation(value = "Update an object of type {kind} with id {id} **Secure")
     @PUT
-    @Secure(Roles.SYSTEM)
+    @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{kind}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -97,7 +97,7 @@ class CrudController {
 
     @ApiOperation(value = "Delete an object of type {kind} with id {id} **Secure")
     @DELETE
-    @Secure(Roles.SYSTEM)
+    @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{kind}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     Entity delete(@PathParam("kind") String kind, @PathParam("id") long id){
