@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response
                 title = "Datastore API",
                 contact = @Contact(
                         name = "Trevor Brooks",
-                        url = "http://www.trevorism.com"
+                        url = "https://www.trevorism.com"
                 )
         )
 )
