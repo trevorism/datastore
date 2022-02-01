@@ -1,7 +1,5 @@
 package com.trevorism.gcloud.webapi.controller
 
-import com.google.appengine.api.datastore.DatastoreService
-import com.google.appengine.api.datastore.DatastoreServiceFactory
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.Contact
@@ -29,16 +27,12 @@ import javax.ws.rs.core.Response
 @Path("/")
 class RootController {
 
-    private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService()
-
     @ApiOperation(value = "Returns 'pong' if the application is alive")
     @GET
     @Path("ping")
     @Produces(MediaType.APPLICATION_JSON)
     String ping(){
-        if(datastore.getDatastoreAttributes().datastoreType)
-            return "pong"
-        return "gnop"
+        return "pong"
     }
 
     @ApiOperation(value = "Context root of the application")

@@ -1,6 +1,9 @@
 package com.trevorism.gcloud.webapi.controller
 
-import com.google.appengine.api.datastore.*
+
+import com.google.cloud.datastore.DatastoreOptions
+import com.google.cloud.datastore.Entity
+import com.google.cloud.datastore.Query
 import com.trevorism.gcloud.dao.CrudDatastoreDAO
 import com.trevorism.gcloud.dao.DatastoreDAO
 import com.trevorism.gcloud.webapi.filter.Created
@@ -17,23 +20,21 @@ import java.util.logging.Logger
 @Path("api")
 class CrudController {
 
-    private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService()
     private static final Logger log = Logger.getLogger(CrudController.class.name)
 
     @ApiOperation(value = "Get all types")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    List<String> getEndpoints(){
-        Query query = new Query(Entities.KIND_METADATA_KIND)
-        def kindEntities = datastore.prepare(query).asIterable()
-
-        def endpoints = []
-        kindEntities.each {
-            String endpoint = it.key.name
-            if(!endpoint.startsWith("__"))
-                endpoints << endpoint
+    List<String> getKinds() {
+        def query = Query.newKeyQueryBuilder().setKind("__kind__").build()
+        def results = DatastoreOptions.defaultInstance.getService().run(query)
+        def list = []
+        results.each {
+            if (!it.getName().startsWith("_")) {
+                list << it.getName()
+            }
         }
-        return endpoints
+        return list
     }
 
     @ApiOperation(value = "Get an object of type {kind} with id {id}")
@@ -41,10 +42,10 @@ class CrudController {
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{kind}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    Entity read(@PathParam("kind") String kind, @PathParam("id") long id){
+    Entity read(@PathParam("kind") String kind, @PathParam("id") long id) {
         DatastoreDAO dao = new CrudDatastoreDAO(kind)
         def entity = dao.read(id)
-        if(!entity)
+        if (!entity)
             throw new NotFoundException()
 
         return entity
@@ -55,7 +56,7 @@ class CrudController {
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{kind}")
     @Produces(MediaType.APPLICATION_JSON)
-    List<Entity> readAll(@PathParam("kind") String kind){
+    List<Entity> readAll(@PathParam("kind") String kind) {
         DatastoreDAO dao = new CrudDatastoreDAO(kind)
         def entities = dao.readAll()
         return entities
@@ -69,12 +70,12 @@ class CrudController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Created
-    Entity create(@PathParam("kind") String kind, Map<String, Object> data){
+    Entity create(@PathParam("kind") String kind, Map<String, Object> data) {
         try {
             DatastoreDAO dao = new CrudDatastoreDAO(kind)
             def entity = dao.create(data)
             return entity
-        }catch (Exception e){
+        } catch (Exception e) {
             log.severe("Unable to create ${kind} object: ${data} :: ${e.getMessage()}")
             throw new BadRequestException(e)
         }
@@ -86,10 +87,10 @@ class CrudController {
     @Path("{kind}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Entity update(@PathParam("kind") String kind, @PathParam("id") long id, Map<String, Object> data){
+    Entity update(@PathParam("kind") String kind, @PathParam("id") long id, Map<String, Object> data) {
         DatastoreDAO dao = new CrudDatastoreDAO(kind)
         def entity = dao.update(id, data)
-        if(!entity)
+        if (!entity)
             throw new NotFoundException()
         return entity
 
@@ -100,10 +101,10 @@ class CrudController {
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{kind}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    Entity delete(@PathParam("kind") String kind, @PathParam("id") long id){
+    Entity delete(@PathParam("kind") String kind, @PathParam("id") long id) {
         DatastoreDAO dao = new CrudDatastoreDAO(kind)
         def entity = dao.delete(id)
-        if(!entity)
+        if (!entity)
             throw new NotFoundException()
         return entity
     }

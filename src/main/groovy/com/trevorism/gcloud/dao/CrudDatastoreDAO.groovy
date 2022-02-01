@@ -1,124 +1,138 @@
 package com.trevorism.gcloud.dao
 
-import com.google.appengine.api.datastore.*
+import com.google.cloud.Timestamp
+import com.google.cloud.datastore.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 
-import javax.ws.rs.BadRequestException
-
+import java.util.logging.Logger
 
 /**
  * @author tbrooks
  */
 class CrudDatastoreDAO implements DatastoreDAO {
 
-    private final DatastoreService datastore
+    private Datastore datastore
     private final String kind
     private final Gson gson
+    private static final Logger log = Logger.getLogger(CrudDatastoreDAO.class.name)
 
-    CrudDatastoreDAO(String kind){
+    CrudDatastoreDAO(String kind) {
         this.kind = kind.toLowerCase()
         this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create();
-        datastore = DatastoreServiceFactory.getDatastoreService()
     }
 
     @Override
     Entity create(Map<String, Object> data) {
-        validateId(data)
+        validate(data)
 
-        Entity entity = setEntityFromJSONObject(kind, data)
-        Key key = datastore.put(entity)
-        return createReturnEntity(key, entity)
+        def toBeCreated = setEntityProperties(data)
+        return getDatastore().put(toBeCreated)
     }
 
-    private static void validateId(Map<String, Object> jsonObject) {
-        if(!jsonObject["id"])
+    private static void validate(Map<String, Object> jsonObject) {
+        if (jsonObject.containsKey("key"))
+            throw new RuntimeException("Invalid object definition. Object cannot have a 'key' column")
+
+        if (!jsonObject["id"])
             return
 
         def id = jsonObject["id"]
-        try{
+        try {
             Long.parseLong(id.toString())
-        }catch(Exception e){
-            throw new BadRequestException("Invalid ID. ID must be a number instead of: ${id}", e)
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid ID. ID must be a number instead of: ${id}", e)
         }
     }
 
     @Override
     Entity read(long id) {
-        Key key = KeyFactory.createKey(kind, id)
-        try{
-            return datastore.get(key)
-        }catch(EntityNotFoundException ignored){
+        Key key = getDatastore().newKeyFactory().setKind(kind).newKey(id)
+        try {
+            return getDatastore().get(key)
+        } catch (Exception ignored) {
+            log.fine("Unable to get entity with id: $id")
             return null
         }
     }
 
     @Override
     List<Entity> readAll() {
-        Query query = new Query(kind)
-        PreparedQuery resultSet = datastore.prepare(query);
-        return resultSet.asList(FetchOptions.Builder.withDefaults())
+        EntityQuery query = EntityQuery.Builder.newInstance().setKind(kind).build()
+        def results = getDatastore().run(query)
+        def list = []
+        results.each {
+            list << it
+        }
+        return list
     }
 
     @Override
     Entity update(long id, Map<String, Object> data) {
         Entity entityExists = read(id)
 
-        if(!entityExists)
+        if (!entityExists)
             return null
 
         data.put("id", id)
-        Entity entity = setEntityProperties(entityExists, data)
-        Key key = datastore.put(entity)
-        return createReturnEntity(key, entity)
+        Key key = getDatastore().newKeyFactory().setKind(kind).newKey(id)
+
+        FullEntity<IncompleteKey> toBeUpdated = setEntityProperties(key, data)
+        return getDatastore().put(toBeUpdated)
     }
 
     @Override
     Entity delete(long id) {
-        Key key = KeyFactory.createKey(kind, id)
+        Key key = getDatastore().newKeyFactory().setKind(kind).newKey(id)
         Entity entity = read(id)
-        if(!entity)
+        if (!entity)
             return null
-        datastore.delete(key)
+
+        getDatastore().delete(key)
         return entity
     }
 
-    private Entity setEntityFromJSONObject(String kind, Map<String, Object> data) {
-        Entity entity = createEmptyEntity(kind, data)
-        setEntityProperties(entity, data)
+    private FullEntity<IncompleteKey> setEntityProperties(Map<String, Object> data) {
+        def key = createEntityKey(data)
+        setEntityProperties(key, data)
     }
 
-    private Entity setEntityProperties(Entity entity, Map<String, Object> data) {
+    private FullEntity<IncompleteKey> setEntityProperties(IncompleteKey key, Map<String, Object> data) {
+        def builder = FullEntity.newBuilder(key)
         data.each { k, v ->
-            if(v instanceof List || v instanceof Map){
+            if (v instanceof List || v instanceof Map) {
                 v = gson.toJson(v)
             }
-            entity.setIndexedProperty(k.toLowerCase(), v)
+            if( v instanceof Date){
+                v = Timestamp.of(v)
+            }
+            builder.set(k.toLowerCase(), v)
         }
-        return entity
+        return builder.build()
     }
 
-    private static Entity createReturnEntity(Key key, Entity entity) {
-        Entity returnEntity = new Entity(key)
-        returnEntity.setPropertiesFrom(entity)
-        return returnEntity
-    }
-
-    private static Entity createEmptyEntity(String kind, Map<String, Object> data) {
+    private IncompleteKey createEntityKey(Map<String, Object> data) {
         long id = getIdFromObject(data)
+        KeyFactory keyFactory = getDatastore().newKeyFactory().setKind(kind)
 
         if (id != 0)
-            return new Entity(kind, id)
+            return keyFactory.newKey(id)
         else
-            return new Entity(kind)
-
+            return keyFactory.newKey()
     }
 
-    private static long getIdFromObject(Map<String, Object> jsonObject) {
-        try{
-            if(jsonObject.containsKey("id"))
-                return Long.valueOf(jsonObject.get("id").toString())
-        }catch (Exception ignored){ }
+    private static long getIdFromObject(Map<String, Object> data) {
+        try {
+            if (data.containsKey("id"))
+                return Long.valueOf(data.get("id").toString())
+        } catch (Exception ignored) {
+        }
         return 0
+    }
+
+    protected Datastore getDatastore() {
+        if (!datastore)
+            datastore = DatastoreOptions.getDefaultInstance().getService()
+        return datastore
     }
 }

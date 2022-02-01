@@ -1,6 +1,7 @@
 package com.trevorism.gcloud.dao
 
-import com.google.appengine.api.datastore.Entity
+import com.google.cloud.datastore.Entity
+
 
 /**
  * @author tbrooks
