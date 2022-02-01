@@ -22,6 +22,10 @@ class CrudController {
 
     private static final Logger log = Logger.getLogger(CrudController.class.name)
 
+    CrudController(){
+        log.info("In CRUD controller constructor")
+    }
+
     @ApiOperation(value = "Get all types")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
