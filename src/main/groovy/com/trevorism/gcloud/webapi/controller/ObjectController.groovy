@@ -1,5 +1,7 @@
 package com.trevorism.gcloud.webapi.controller
 
+import com.google.cloud.datastore.DatastoreOptions
+import com.google.cloud.datastore.Query
 import com.trevorism.gcloud.dao.CrudDatastoreDAO
 import com.trevorism.gcloud.dao.DatastoreDAO
 import com.trevorism.gcloud.webapi.filter.Created
@@ -31,6 +33,21 @@ class ObjectController {
         log.info("In object controller constructor")
     }
 
+    @ApiOperation(value = "Get all object types")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    List<String> getKinds() {
+        def query = Query.newKeyQueryBuilder().setKind("__kind__").build()
+        def results = DatastoreOptions.defaultInstance.getService().run(query)
+        def list = []
+        results.each {
+            if (!it.getName().startsWith("_")) {
+                list << it.getName()
+            }
+        }
+        return list
+    }
+
     @ApiOperation(value = "Get an object of type {kind} with id {id}")
     @GET
     @Secure(value = Roles.SYSTEM, allowInternal = true)
@@ -45,7 +62,7 @@ class ObjectController {
         return entity
     }
 
-    @ApiOperation(value = "Get all objects of type {kind}")
+    @ApiOperation(value = "Get all objects of type {kind} **Secure")
     @GET
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{kind}")
