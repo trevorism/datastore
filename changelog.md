@@ -9,3 +9,8 @@ Made https a requirement
 # 1.4.0
 
 Reimplemented datastore to use latest google library. Made performance improvements.
+
+# 1.5.0
+
+Added object endpoints to match api. We will transition to object in version 2.0.0 as it fits the data.trevorism.com interface pattern.
+Implemented native filtering, sorting, and paging

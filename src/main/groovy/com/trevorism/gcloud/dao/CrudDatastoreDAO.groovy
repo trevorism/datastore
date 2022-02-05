@@ -4,6 +4,7 @@ import com.google.cloud.Timestamp
 import com.google.cloud.datastore.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.trevorism.gcloud.webapi.service.EntityList
 
 import java.util.logging.Logger
 
@@ -60,11 +61,7 @@ class CrudDatastoreDAO implements DatastoreDAO {
     List<Entity> readAll() {
         EntityQuery query = EntityQuery.Builder.newInstance().setKind(kind).build()
         def results = getDatastore().run(query)
-        def list = []
-        results.each {
-            list << it
-        }
-        return list
+        new EntityList(results).toList()
     }
 
     @Override
@@ -130,7 +127,7 @@ class CrudDatastoreDAO implements DatastoreDAO {
         return 0
     }
 
-    protected Datastore getDatastore() {
+    private Datastore getDatastore() {
         if (!datastore)
             datastore = DatastoreOptions.getDefaultInstance().getService()
         return datastore
