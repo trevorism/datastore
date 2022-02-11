@@ -15,13 +15,10 @@ class FilterControllerTest {
         FilterController filterController = new FilterController()
 
         def date = LocalDateTime.of(2022,1,31,23,30,0).atZone(ZoneOffset.systemDefault())
-        println date.toInstant().toString()
 
         def list = filterController.operate(new ComplexFilter(type: FilterConstants.AND,
                 simpleFilters: [  new SimpleFilter(type: FilterConstants.TYPE_DATE, field: "date", operator: "<=", value: date.toInstant().toString()) ]
         ), "test")
-        list.each {
-            println it
-        }
+        assert list
     }
 }

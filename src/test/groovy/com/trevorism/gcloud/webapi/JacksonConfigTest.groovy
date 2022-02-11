@@ -30,7 +30,6 @@ class JacksonConfigTest {
         builder.set("date", Timestamp.of(calendar.getTime()))
 
         def entity = builder.build()
-        println mapper.writeValueAsString(entity)
         assert "{\"id\":2,\"date\":\"2016-04-17T12:00:50Z\",\"name\":\"trevor\"}" == mapper.writeValueAsString(entity)
 
     }

@@ -96,10 +96,6 @@ class EmptyDatabaseCrudDatastoreDAOTest {
 
         Entity entity = dao.create(jsonObject)
 
-        println entity
-        println entity.key
-        println entity.key.id
-
     }
 
 }
