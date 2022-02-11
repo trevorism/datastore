@@ -17,9 +17,9 @@ class DatastoreSortService implements SortService {
         def list = []
         request.sorts.each {
             if (it.descending) {
-                list << OrderBy.desc(it.field)
+                list << OrderBy.desc(it.field.toLowerCase())
             } else {
-                list << OrderBy.asc(it.field)
+                list << OrderBy.asc(it.field.toLowerCase())
             }
         }
 

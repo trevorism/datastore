@@ -80,11 +80,11 @@ class DatastoreFilterService implements FilterService{
 
 
         switch (filter.operator) {
-            case FilterConstants.OPERATOR_EQUAL: return PropertyFilter.eq(filter.field, value)
-            case FilterConstants.OPERATOR_GREATER_THAN: return PropertyFilter.gt(filter.field, value)
-            case FilterConstants.OPERATOR_GREATER_THAN_OR_EQUAL: return PropertyFilter.ge(filter.field, value)
-            case FilterConstants.OPERATOR_LESS_THAN: return PropertyFilter.lt(filter.field, value)
-            case FilterConstants.OPERATOR_LESS_THAN_OR_EQUAL: return PropertyFilter.le(filter.field, value)
+            case FilterConstants.OPERATOR_EQUAL: return PropertyFilter.eq(filter.field.toLowerCase(), value)
+            case FilterConstants.OPERATOR_GREATER_THAN: return PropertyFilter.gt(filter.field.toLowerCase(), value)
+            case FilterConstants.OPERATOR_GREATER_THAN_OR_EQUAL: return PropertyFilter.ge(filter.field.toLowerCase(), value)
+            case FilterConstants.OPERATOR_LESS_THAN: return PropertyFilter.lt(filter.field.toLowerCase(), value)
+            case FilterConstants.OPERATOR_LESS_THAN_OR_EQUAL: return PropertyFilter.le(filter.field.toLowerCase(), value)
             case FilterConstants.OPERATOR_NOT_EQUAL: throw new RuntimeException("Unsupported operator")
         }
     }
