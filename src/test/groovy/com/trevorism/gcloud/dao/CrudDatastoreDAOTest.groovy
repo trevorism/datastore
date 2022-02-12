@@ -54,8 +54,7 @@ class CrudDatastoreDAOTest {
 
     @Test
     void testSimple(){
-        def d = new CrudDatastoreDAO("testsample")
-        def list = d.readAll()
+        def list = dao.readAll()
         assert list
     }
 
