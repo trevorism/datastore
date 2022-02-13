@@ -82,7 +82,6 @@ class DatastoreFilterService implements FilterService{
         else if(filter.type?.toLowerCase() == FilterConstants.TYPE_NUMBER)
             value = Double.valueOf(value)
 
-
         switch (filter.operator) {
             case FilterConstants.OPERATOR_EQUAL: return PropertyFilter.eq(filter.field.toLowerCase(), value)
             case FilterConstants.OPERATOR_GREATER_THAN: return PropertyFilter.gt(filter.field.toLowerCase(), value)

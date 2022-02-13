@@ -20,6 +20,11 @@ class DatastoreFilterServiceTest {
 
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
 
+    DatastoreFilterServiceTest()
+    {
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
+    }
+
     @Test
     void testFilter() {
         DatastoreFilterService service = new DatastoreFilterService()
