@@ -19,6 +19,10 @@ class DatastoreFilterService implements FilterService{
     private Datastore datastore
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
 
+    DatastoreFilterService(){
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
+    }
+
     @Override
     def filter(ComplexFilter request, String kind) {
         def queryBuilder = EntityQuery.Builder.newInstance().setKind(kind)
