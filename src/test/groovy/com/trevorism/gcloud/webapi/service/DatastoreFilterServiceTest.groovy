@@ -92,9 +92,8 @@ class DatastoreFilterServiceTest {
     @Test
     void testCreateIdFilter() {
         DatastoreFilterService service = new DatastoreFilterService()
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        StructuredQuery.Filter filter = service.createSimpleFilter(
-                new SimpleFilter(type: FilterConstants.TYPE_NUMBER, field: "id", operator: FilterConstants.OPERATOR_EQUAL, value: "59234923"), "kind")
+        def simpleFilter = new SimpleFilter(type: FilterConstants.TYPE_NUMBER, field: "id", operator: FilterConstants.OPERATOR_EQUAL, value: "59234923")
+        StructuredQuery.Filter filter = service.createSimpleFilter(simpleFilter, "kind")
 
         assert filter.property == "__key__"
         assert filter.operator.toString() == "EQUAL"
