@@ -1,6 +1,5 @@
 # Datastore
-![Jenkins](https://img.shields.io/jenkins/build/http/trevorism-build.eastus.cloudapp.azure.com/datastore)
-![Jenkins Coverage](https://img.shields.io/jenkins/coverage/jacoco/http/trevorism-build.eastus.cloudapp.azure.com/datastore)
+![Build](https://github.com/trevorism/datastore/actions/workflows/deploy.yml/badge.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/trevorism/datastore)
 ![GitHub language count](https://img.shields.io/github/languages/count/trevorism/datastore)
 ![GitHub top language](https://img.shields.io/github/languages/top/trevorism/datastore)
