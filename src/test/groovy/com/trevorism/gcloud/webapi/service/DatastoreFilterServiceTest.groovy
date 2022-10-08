@@ -92,8 +92,12 @@ class DatastoreFilterServiceTest {
 
     @Test
     void testCreateIdFilter() {
-        DatastoreFilterService service = new DatastoreFilterService()
-        DatastoreFilterService.metaClass.getDatastore = {[newKeyFactory: { new KeyFactory("trevorism-gcloud")}] as Datastore}
+        DatastoreFilterService service = new DatastoreFilterService(){
+            @Override
+            Datastore getDatastore() {
+                [newKeyFactory: { new KeyFactory("trevorism-gcloud")}] as Datastore
+            }
+        }
         def simpleFilter = new SimpleFilter(type: FilterConstants.TYPE_NUMBER, field: "id", operator: FilterConstants.OPERATOR_EQUAL, value: "59234923")
         StructuredQuery.Filter filter = service.createSimpleFilter(simpleFilter, "kind")
 

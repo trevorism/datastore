@@ -39,7 +39,7 @@ class DatastoreFilterService implements FilterService{
 
     }
 
-    private Datastore getDatastore() {
+    Datastore getDatastore() {
         if (!datastore)
             datastore = DatastoreOptions.getDefaultInstance().getService()
         return datastore
