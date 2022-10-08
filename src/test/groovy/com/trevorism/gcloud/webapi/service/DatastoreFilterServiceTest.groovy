@@ -2,6 +2,7 @@ package com.trevorism.gcloud.webapi.service
 
 import com.google.cloud.datastore.Datastore
 import com.google.cloud.datastore.FullEntity
+import com.google.cloud.datastore.KeyFactory
 import com.google.cloud.datastore.QueryResults
 import com.google.cloud.datastore.StructuredQuery
 import com.trevorism.gcloud.webapi.model.filtering.ComplexFilter
@@ -92,6 +93,7 @@ class DatastoreFilterServiceTest {
     @Test
     void testCreateIdFilter() {
         DatastoreFilterService service = new DatastoreFilterService()
+        service.metaClass.getDatastore = {[newKeyFactory: { new KeyFactory("trevorism-gcloud")}] as Datastore}
         def simpleFilter = new SimpleFilter(type: FilterConstants.TYPE_NUMBER, field: "id", operator: FilterConstants.OPERATOR_EQUAL, value: "59234923")
         StructuredQuery.Filter filter = service.createSimpleFilter(simpleFilter, "kind")
 
