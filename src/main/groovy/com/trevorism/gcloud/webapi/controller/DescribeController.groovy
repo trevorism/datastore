@@ -1,36 +1,34 @@
 package com.trevorism.gcloud.webapi.controller
 
+import io.micronaut.http.MediaType
+import io.micronaut.http.annotation.Body
+import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.Post
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-
-import javax.ws.rs.*
-import javax.ws.rs.core.MediaType
-
-@Api("Describe Operations")
-@Path("describe")
+@Controller("/describe")
 class DescribeController {
 
-    @ApiOperation(value = "Perform a data operation and get a result **Secure")
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    def operate(def query){
+    @Tag(name = "Describe Operations")
+    @Operation(summary = "Perform a describe data operation")
+    @Post(value = "/", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
+    def operate(@Body def query){
         return ["list", "create", "read", "update", "delete", "filter", "page", "sort"]
     }
 
-    @ApiOperation(value = "Get results of a saved data operation **Secure")
-    @GET
-    @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    def operateById(@PathParam("id") String id){
+    @Tag(name = "Describe Operations")
+    @Operation(summary = "Get a description of the performable data actions")
+    @Get(value = "{id}", produces = MediaType.APPLICATION_JSON)
+    def operateById(String id){
         return ["list", "create", "read", "update", "delete", "filter", "page", "sort"]
     }
 
-    @ApiOperation(value = "Get results of a saved data operation **Secure")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Tag(name = "Describe Operations")
+    @Operation(summary = "Get a description of the performable data actions")
+    @Get(value = "/", produces = MediaType.APPLICATION_JSON)
     def describe(){
         return ["list", "create", "read", "update", "delete", "filter", "page", "sort"]
     }

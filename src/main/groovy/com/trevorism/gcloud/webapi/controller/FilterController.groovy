@@ -5,29 +5,24 @@ import com.trevorism.gcloud.webapi.service.DatastoreFilterService
 import com.trevorism.gcloud.webapi.service.FilterService
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.micronaut.http.MediaType
+import io.micronaut.http.annotation.Body
+import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Post
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 
-import javax.ws.rs.Consumes
-import javax.ws.rs.POST
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.Produces
-import javax.ws.rs.core.MediaType
 
-@Api("Filter Operations")
-@Path("filter")
+@Controller("/filter")
 class FilterController {
 
     private FilterService filterService = new DatastoreFilterService()
 
-    @ApiOperation(value = "Perform a filter operation and get a result **Secure")
-    @POST
-    @Path("{kind}")
-    @Secure(value = Roles.SYSTEM, allowInternal = true)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    def operate(ComplexFilter filter, @PathParam("kind") String kind){
+    @Tag(name = "Filter Operations")
+    @Operation(summary = "Perform a filter data operation **Secure")
+    @Post(value = "/{kind}", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
+    @Secure(value = Roles.USER, allowInternal = true)
+    def operate(String kind, @Body ComplexFilter filter){
         filterService.filter(filter, kind)
     }
 

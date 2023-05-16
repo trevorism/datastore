@@ -1,3 +1,7 @@
+# 1.8.0
+
+Move to micronaut, java 17. Change the host to https://datastore.data.trevorism.com
+
 # 1.6.0
 
 Update to github actions

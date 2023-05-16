@@ -5,7 +5,9 @@ import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.Key
 import com.google.cloud.datastore.KeyFactory
 import com.google.cloud.datastore.QueryResults
-import org.junit.Test
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertThrows
 
 /**
  * @author tbrooks
@@ -88,13 +90,13 @@ class EmptyDatabaseCrudDatastoreDAOTest {
         assert entity.getString("name") == readEntity.getString("name")
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test()
     void testCreateWithInvalidId() {
         def jsonObject = [:]
         jsonObject.put("name", "sample")
         jsonObject.put("id", "invalid")
 
-        Entity entity = dao.create(jsonObject)
+        assertThrows(RuntimeException, () -> dao.create(jsonObject))
 
     }
 

@@ -1,17 +1,17 @@
 package com.trevorism.gcloud
-this.metaClass.mixin(cucumber.api.groovy.Hooks)
-this.metaClass.mixin(cucumber.api.groovy.EN)
+this.metaClass.mixin(io.cucumber.groovy.Hooks)
+this.metaClass.mixin(io.cucumber.api.groovy.EN)
 
 def contextRootContent
 def pingContent
 
 Given(~/^the datastore application is alive$/) { ->
     try{
-        new URL("https://datastore.trevorism.com/ping").text
+        new URL("https://datastore.data.trevorism.com/ping").text
     }
     catch (Exception ignored){
         Thread.sleep(10000)
-        new URL("https://datastore.trevorism.com/ping").text
+        new URL("https://datastore.data.trevorism.com/ping").text
     }
 }
 

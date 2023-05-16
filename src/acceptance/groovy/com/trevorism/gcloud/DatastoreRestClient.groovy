@@ -1,14 +1,11 @@
 package com.trevorism.gcloud
 
-
-import com.trevorism.http.headers.HeadersHttpClient
-import com.trevorism.http.headers.HeadersJsonHttpClient
-import com.trevorism.http.util.ResponseUtils
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import com.trevorism.https.DefaultSecureHttpClient
 import com.trevorism.https.SecureHttpClient
-import gherkin.deps.com.google.gson.Gson
-import gherkin.deps.com.google.gson.GsonBuilder
-import gherkin.deps.com.google.gson.reflect.TypeToken
+
 
 /**
  * @author tbrooks

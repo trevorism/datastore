@@ -8,7 +8,7 @@ import com.google.cloud.datastore.StructuredQuery
 import com.trevorism.gcloud.webapi.model.filtering.ComplexFilter
 import com.trevorism.gcloud.webapi.model.filtering.FilterConstants
 import com.trevorism.gcloud.webapi.model.filtering.SimpleFilter
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -29,7 +29,7 @@ class DatastoreFilterServiceTest {
     @Test
     void testFilter() {
         DatastoreFilterService service = new DatastoreFilterService()
-        service.datastore = { q -> [FullEntity.Builder.newInstance(), FullEntity.Builder.newInstance()] as QueryResults } as Datastore
+        service.datastore = { q -> [new FullEntity.Builder(), new FullEntity.Builder()] as QueryResults } as Datastore
         String dateString = dateFormat.format(Date.from(LocalDateTime.of(2012,1,1,0,0,0).toInstant(ZoneOffset.UTC)))
 
         def results = service.filter(new ComplexFilter(type: FilterConstants.AND, simpleFilters: [
@@ -83,11 +83,11 @@ class DatastoreFilterServiceTest {
         def now = Instant.now()
 
         StructuredQuery.Filter filter = service.createSimpleFilter(
-                new SimpleFilter(type: FilterConstants.TYPE_DATE, field: "date", operator: FilterConstants.OPERATOR_GREATER_THAN, value: dateFormat.format(now.toDate())), "kind")
+                new SimpleFilter(type: FilterConstants.TYPE_DATE, field: "date", operator: FilterConstants.OPERATOR_GREATER_THAN, value: dateFormat.format(Date.from(now))), "kind")
 
         assert filter.property == "date"
         assert filter.operator.toString() == "GREATER_THAN"
-        assert dateFormat.format(filter.value.get().toDate()) == dateFormat.format(now.toDate())
+        assert dateFormat.format(filter.value.get().toDate()) == dateFormat.format(Date.from(now))
     }
 
     @Test

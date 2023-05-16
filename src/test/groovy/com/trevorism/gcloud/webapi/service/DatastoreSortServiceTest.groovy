@@ -3,7 +3,7 @@ package com.trevorism.gcloud.webapi.service
 import com.google.cloud.datastore.Datastore
 import com.trevorism.gcloud.webapi.model.sorting.ComplexSort
 import com.trevorism.gcloud.webapi.model.sorting.Sort
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 import java.time.Instant
 import java.time.temporal.ChronoUnit

@@ -1,8 +1,10 @@
 package com.trevorism.gcloud.dao
 
 import com.google.cloud.datastore.*
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
+import com.google.cloud.datastore.KeyFactory
 
 /**
  * @author tbrooks
@@ -39,7 +41,7 @@ class CrudDatastoreDAOTest {
         ] as Datastore
     }
 
-    @Before
+    @BeforeEach
     void setUp() {
         def jsonObject = [:]
         jsonObject.put("name", "sample1")

@@ -1,7 +1,7 @@
 package com.trevorism.gcloud
 
-this.metaClass.mixin(cucumber.api.groovy.Hooks)
-this.metaClass.mixin(cucumber.api.groovy.EN)
+this.metaClass.mixin(io.cucumber.groovy.Hooks)
+this.metaClass.mixin(io.cucumber.groovy.EN)
 
 Arbitrary initialArbitrary
 Arbitrary createdArbitrary

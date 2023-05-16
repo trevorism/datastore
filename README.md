@@ -4,7 +4,7 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/trevorism/datastore)
 ![GitHub top language](https://img.shields.io/github/languages/top/trevorism/datastore)
 
-Latest Version: 1.6.0
+Latest Version: 1.8.0
 
 CRUD operations on objects via a REST API.
 
@@ -19,7 +19,7 @@ Any operation that costs $ is secured. You'll need to authorize the request to u
 Supports filtering, sorting, and paging. These are subject to the limitations of the underlying data source, which means
 certain operations may fail on unindexed columns. For a full in memory implementation of these operations, see [Trevorism Data](https://github.com/trevorism/data)
 
-Deployed at [Datastore](https://datastore.trevorism.com)
+Deployed at [Datastore](https://datastore.data.trevorism.com)
 
 
 

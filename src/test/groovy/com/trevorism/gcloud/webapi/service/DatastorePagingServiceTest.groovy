@@ -4,7 +4,7 @@ import com.google.cloud.datastore.Datastore
 import com.google.cloud.datastore.FullEntity
 import com.google.cloud.datastore.QueryResults
 import com.trevorism.gcloud.webapi.model.paging.Page
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class DatastorePagingServiceTest {
 

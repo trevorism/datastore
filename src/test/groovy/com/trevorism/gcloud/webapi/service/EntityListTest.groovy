@@ -5,7 +5,7 @@ import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.FullEntity
 import com.google.cloud.datastore.QueryResults
 import com.google.datastore.v1.QueryResultBatch
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class EntityListTest {
 
