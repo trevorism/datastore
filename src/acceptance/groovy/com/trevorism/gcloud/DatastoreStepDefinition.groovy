@@ -24,7 +24,11 @@ Given(~/^an invalid test object is defined$/) { ->
 }
 
 When(~/^the invalid test object is created$/) { ->
-    invalidResultJson = restClient.attemptToStoreInvalid(invalid)
+    try{
+        invalidResultJson = restClient.attemptToStoreInvalid(invalid)
+    }catch(Exception e){
+        invalidResultJson = e.message
+    }
 }
 
 Then(~/^an error is thrown, indicating the failure$/) { ->
