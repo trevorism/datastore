@@ -71,7 +71,7 @@ class CrudDatastoreDAO implements DatastoreDAO {
 
     @Override
     Map<String, Object> update(long id, Map<String, Object> data) {
-        Entity entityExists = read(id)
+        Map<String, Object> entityExists = read(id)
 
         if (!entityExists)
             return null
@@ -86,12 +86,12 @@ class CrudDatastoreDAO implements DatastoreDAO {
     @Override
     Map<String, Object> delete(long id) {
         Key key = getDatastore().newKeyFactory().setKind(kind).newKey(id)
-        Entity entity = read(id)
+        Map<String, Object> entity = read(id)
         if (!entity)
             return null
 
         getDatastore().delete(key)
-        return EntitySerializer.serialize(entity)
+        return entity
     }
 
     private FullEntity<IncompleteKey> setEntityProperties(Map<String, Object> data) {

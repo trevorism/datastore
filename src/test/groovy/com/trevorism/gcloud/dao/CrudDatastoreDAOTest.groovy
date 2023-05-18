@@ -4,7 +4,6 @@ import com.google.cloud.datastore.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-import com.google.cloud.datastore.KeyFactory
 
 /**
  * @author tbrooks
@@ -69,38 +68,38 @@ class CrudDatastoreDAOTest {
     @Test
     void testRead() {
         def result = dao.read(id1)
-        assert result.key.id == id1
-        assert result.getString("name") == "sample1"
+        assert result.get("id") == id1
+        assert result.get("name") == "sample1"
 
         def result2 = dao.read(id2)
 
-        assert result2.key.id == id2
-        assert result2.getString("name") == "sample2"
+        assert result2.get("id") == id2
+        assert result2.get("name") == "sample2"
     }
 
     @Test
     void testUpdate() {
-        def jsonObject = [:]
+        Map<String,Object> jsonObject = [:]
         jsonObject.put("name", "sample77")
 
         def result = dao.update(id1, jsonObject)
-        assert result.getString("name") == "sample77"
+        assert result.get("name") == "sample77"
 
         def result2 = dao.read(id1)
-        assert result2.getString("name") == "sample77"
+        assert result2.get("name") == "sample77"
     }
 
     @Test
     void testUpdateWithId() {
-        def jsonObject = [:]
+        Map<String,Object> jsonObject = [:]
         jsonObject.put("name", "sample22")
         jsonObject.put("id", "invalid1")
 
         def result = dao.update(id1, jsonObject)
-        assert result.getLong("id") == id1
+        assert result.get("id") == id1
 
         def result2 = dao.read(id1)
-        assert result2.getLong("id") == id1
+        assert result2.get("id") == id1
     }
 
     @Test
