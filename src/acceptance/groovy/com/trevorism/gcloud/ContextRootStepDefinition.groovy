@@ -1,6 +1,6 @@
 package com.trevorism.gcloud
 this.metaClass.mixin(io.cucumber.groovy.Hooks)
-this.metaClass.mixin(io.cucumber.api.groovy.EN)
+this.metaClass.mixin(io.cucumber.groovy.EN)
 
 def contextRootContent
 def pingContent

@@ -46,7 +46,7 @@ class ObjectController {
     @Operation(summary = "Get an object of type {kind} with id {id}")
     @Get(value = "{kind}/{id}", produces = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
-    Entity read(String kind, long id) {
+    Map<String, Object> read(String kind, long id) {
         DatastoreDAO dao = new CrudDatastoreDAO(kind)
         def entity = dao.read(id)
         if (!entity)
@@ -59,7 +59,7 @@ class ObjectController {
     @Operation(summary = "Get all objects of type {kind}")
     @Get(value = "{kind}", produces = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
-    List<Entity> readAll(String kind) {
+    List<Map<String, Object>> readAll(String kind) {
         DatastoreDAO dao = new CrudDatastoreDAO(kind)
         def entities = dao.readAll()
         return entities
@@ -69,7 +69,7 @@ class ObjectController {
     @Operation(summary = "Create an object of type {kind} **Secure")
     @Post(value = "{kind}", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
-    Entity create(String kind, @Body Map<String, Object> data) {
+    Map<String, Object> create(String kind, @Body Map<String, Object> data) {
         try {
             DatastoreDAO dao = new CrudDatastoreDAO(kind)
             def entity = dao.create(data)
@@ -84,7 +84,7 @@ class ObjectController {
     @Operation(summary = "Update an object of type {kind} with id {id} **Secure")
     @Put(value = "{kind}/{id}", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
-    Entity update(String kind, long id, @Body Map<String, Object> data) {
+    Map<String, Object> update(String kind, long id, @Body Map<String, Object> data) {
         DatastoreDAO dao = new CrudDatastoreDAO(kind)
         def entity = dao.update(id, data)
         if (!entity)
@@ -96,7 +96,7 @@ class ObjectController {
     @Operation(summary = "Delete an object of type {kind} with id {id} **Secure")
     @Delete(value = "{kind}/{id}", produces = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
-    Entity delete(String kind, long id) {
+    Map<String, Object> delete(String kind, long id) {
         DatastoreDAO dao = new CrudDatastoreDAO(kind)
         def entity = dao.delete(id)
         if (!entity)

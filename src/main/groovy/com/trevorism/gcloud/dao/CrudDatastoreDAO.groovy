@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.trevorism.gcloud.webapi.service.EntityList
 
+import java.text.SimpleDateFormat
 import java.util.logging.Logger
 
 /**
@@ -14,6 +15,7 @@ import java.util.logging.Logger
 class CrudDatastoreDAO implements DatastoreDAO {
 
     private Datastore datastore
+
     private final String kind
     private final Gson gson
     private static final Logger log = Logger.getLogger(CrudDatastoreDAO.class.name)
@@ -24,11 +26,12 @@ class CrudDatastoreDAO implements DatastoreDAO {
     }
 
     @Override
-    Entity create(Map<String, Object> data) {
+    Map<String, Object> create(Map<String, Object> data) {
         validate(data)
 
         def toBeCreated = setEntityProperties(data)
-        return getDatastore().put(toBeCreated)
+        Entity entity = getDatastore().put(toBeCreated)
+        EntitySerializer.serialize(entity)
     }
 
     private static void validate(Map<String, Object> jsonObject) {
@@ -47,10 +50,10 @@ class CrudDatastoreDAO implements DatastoreDAO {
     }
 
     @Override
-    Entity read(long id) {
+    Map<String, Object> read(long id) {
         Key key = getDatastore().newKeyFactory().setKind(kind).newKey(id)
         try {
-            return getDatastore().get(key)
+            return EntitySerializer.serialize(getDatastore().get(key))
         } catch (Exception ignored) {
             log.fine("Unable to get entity with id: $id")
             return null
@@ -58,14 +61,16 @@ class CrudDatastoreDAO implements DatastoreDAO {
     }
 
     @Override
-    List<Entity> readAll() {
+    List<Map<String, Object>> readAll() {
         EntityQuery query = EntityQuery.Builder.newInstance().setKind(kind).build()
         def results = getDatastore().run(query)
-        new EntityList(results).toList()
+        new EntityList(results).toList().collect {
+            EntitySerializer.serialize(it)
+        }
     }
 
     @Override
-    Entity update(long id, Map<String, Object> data) {
+    Map<String, Object> update(long id, Map<String, Object> data) {
         Entity entityExists = read(id)
 
         if (!entityExists)
@@ -75,18 +80,18 @@ class CrudDatastoreDAO implements DatastoreDAO {
         Key key = getDatastore().newKeyFactory().setKind(kind).newKey(id)
 
         FullEntity<IncompleteKey> toBeUpdated = setEntityProperties(key, data)
-        return getDatastore().put(toBeUpdated)
+        return EntitySerializer.serialize(getDatastore().put(toBeUpdated))
     }
 
     @Override
-    Entity delete(long id) {
+    Map<String, Object> delete(long id) {
         Key key = getDatastore().newKeyFactory().setKind(kind).newKey(id)
         Entity entity = read(id)
         if (!entity)
             return null
 
         getDatastore().delete(key)
-        return entity
+        return EntitySerializer.serialize(entity)
     }
 
     private FullEntity<IncompleteKey> setEntityProperties(Map<String, Object> data) {
@@ -100,8 +105,9 @@ class CrudDatastoreDAO implements DatastoreDAO {
             if (v instanceof List || v instanceof Map) {
                 v = gson.toJson(v)
             }
-            if( v instanceof Date){
-                v = Timestamp.of(v)
+            if (isParseableToDate(v)) {
+                Date date = parseDate(v)
+                v = Timestamp.of(date)
             }
             builder.set(k.toLowerCase(), v)
         }
@@ -131,5 +137,18 @@ class CrudDatastoreDAO implements DatastoreDAO {
         if (!datastore)
             datastore = DatastoreOptions.getDefaultInstance().getService()
         return datastore
+    }
+
+    private static boolean isParseableToDate(Object o) {
+        try {
+            DateFormatProvider.dateFormat.parse(o.toString())
+            return true
+        } catch (Exception ignored) {
+            return false
+        }
+    }
+
+    private static Date parseDate(Object o) {
+        return DateFormatProvider.dateFormat.parse(o.toString())
     }
 }

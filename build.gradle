@@ -63,6 +63,7 @@ dependencies {
 
     implementation 'com.google.cloud:google-cloud-datastore:2.14.6'
 
+    acceptanceImplementation 'org.slf4j:slf4j-simple:2.0.6'
     acceptanceImplementation 'io.cucumber:cucumber-groovy:6.10.4'
     acceptanceImplementation 'com.trevorism:secure-http-utils:2.0.1'
     acceptanceImplementation 'com.google.code.gson:gson:2.10.1'

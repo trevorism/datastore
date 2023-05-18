@@ -8,12 +8,12 @@ import com.google.cloud.datastore.Entity
  */
 interface DatastoreDAO {
 
-    Entity create(Map<String, Object> data)
+    Map<String, Object> create(Map<String, Object> data)
 
-    Entity read(long id)
-    List<Entity> readAll()
+    Map<String, Object> read(long id)
+    List<Map<String, Object>> readAll()
 
-    Entity update(long id, Map<String, Object>  data)
+    Map<String, Object> update(long id, Map<String, Object>  data)
 
-    Entity delete(long id)
+    Map<String, Object> delete(long id)
 }
