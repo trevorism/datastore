@@ -1,3 +1,8 @@
 runtime: java17
 service: datastore
 entrypoint: java -jar datastore-all.jar
+handlers:
+  - url: /.*
+    secure: always
+    redirect_http_response_code: 301
+    script: auto
