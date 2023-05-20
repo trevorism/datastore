@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
 @OpenAPIDefinition(
         info = @Info(
                 title = "Datastore API",
-                version = "1.8.0",
+                version = "2.0.0",
                 description = "Wraps google datastore and conforms to the Trevorism Data interface",
                 contact = @Contact(url = "https://trevorism.com", name = "Trevor Brooks", email = "tbrooks@trevorism.com")
         )

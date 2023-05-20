@@ -8,6 +8,7 @@ import com.trevorism.gcloud.dao.CrudDatastoreDAO
 import com.trevorism.gcloud.dao.DatastoreDAO
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
+import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
@@ -15,9 +16,10 @@ import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Put
+import io.micronaut.http.annotation.Status
+import io.micronaut.http.exceptions.HttpStatusException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.apache.hc.client5.http.HttpResponseException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -50,7 +52,7 @@ class ObjectController {
         DatastoreDAO dao = new CrudDatastoreDAO(kind)
         def entity = dao.read(id)
         if (!entity)
-            throw new HttpResponseException(404, "${id} not found")
+            throw new HttpStatusException(HttpStatus.NOT_FOUND, "${id} not found")
 
         return entity
     }
@@ -67,6 +69,7 @@ class ObjectController {
 
     @Tag(name = "Object Operations")
     @Operation(summary = "Create an object of type {kind} **Secure")
+    @Status(HttpStatus.CREATED)
     @Post(value = "{kind}", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
     Map<String, Object> create(String kind, @Body Map<String, Object> data) {
@@ -76,7 +79,7 @@ class ObjectController {
             return entity
         } catch (Exception e) {
             log.error("Unable to create ${kind}", e)
-            throw new HttpResponseException(400, e.message)
+            throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unable to create ${kind}")
         }
     }
 
@@ -88,7 +91,7 @@ class ObjectController {
         DatastoreDAO dao = new CrudDatastoreDAO(kind)
         def entity = dao.update(id, data)
         if (!entity)
-            throw new HttpResponseException(404, "${id} not found")
+            throw new HttpStatusException(HttpStatus.NOT_FOUND, "${id} not found")
         return entity
     }
 
@@ -100,7 +103,7 @@ class ObjectController {
         DatastoreDAO dao = new CrudDatastoreDAO(kind)
         def entity = dao.delete(id)
         if (!entity)
-            throw new HttpResponseException(404, "${id} not found")
+            throw new HttpStatusException(HttpStatus.NOT_FOUND, "${id} not found")
         return entity
     }
 
