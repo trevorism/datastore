@@ -12,9 +12,9 @@ import jakarta.inject.Inject
 import java.util.logging.Logger
 
 @jakarta.inject.Singleton
-class CrudDatastoreDAO implements DatastoreDAO {
+class CrudDatastoreRepository implements DatastoreRepository {
 
-    private static final Logger log = Logger.getLogger(CrudDatastoreDAO.class.name)
+    private static final Logger log = Logger.getLogger(CrudDatastoreRepository.class.name)
     private final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create()
 
     @Inject

@@ -2,7 +2,7 @@ package com.trevorism.gcloud.webapi.controller
 
 import com.google.cloud.datastore.Query
 import com.trevorism.gcloud.bean.DatastoreProvider
-import com.trevorism.gcloud.webapi.service.CrudDatastoreDAO
+import com.trevorism.gcloud.webapi.service.CrudDatastoreRepository
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
 import io.micronaut.http.HttpStatus
@@ -28,7 +28,7 @@ class ObjectController {
     private static final Logger log = LoggerFactory.getLogger(ObjectController.class.name)
 
     @Inject
-    CrudDatastoreDAO dao
+    CrudDatastoreRepository dao
 
     @Inject
     DatastoreProvider datastoreProvider

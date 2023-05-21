@@ -5,7 +5,7 @@ import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.Key
 import com.google.cloud.datastore.KeyFactory
 import com.google.cloud.datastore.QueryResults
-import com.trevorism.gcloud.webapi.service.CrudDatastoreDAO
+import com.trevorism.gcloud.webapi.service.CrudDatastoreRepository
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
@@ -20,7 +20,7 @@ class EmptyDatabaseCrudDatastoreDAOTest {
 
     private final String kind = "TestSample"
     @Inject
-    private CrudDatastoreDAO dao
+    private CrudDatastoreRepository dao
 
     @Inject
     @Client("/")

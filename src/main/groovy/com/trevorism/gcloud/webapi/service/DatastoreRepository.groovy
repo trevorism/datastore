@@ -5,7 +5,7 @@ import com.google.cloud.datastore.Datastore
 /**
  * @author tbrooks
  */
-interface DatastoreDAO {
+interface DatastoreRepository {
 
     Map<String, Object> create(String kind, Map<String, Object> data)
 

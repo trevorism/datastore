@@ -1,7 +1,7 @@
 package com.trevorism.gcloud.dao
 
 import com.google.cloud.datastore.*
-import com.trevorism.gcloud.webapi.service.CrudDatastoreDAO
+import com.trevorism.gcloud.webapi.service.CrudDatastoreRepository
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.BeforeEach
@@ -22,7 +22,7 @@ class CrudDatastoreDAOTest {
     private final long id2 = 2
 
     @Inject
-    private CrudDatastoreDAO dao
+    private CrudDatastoreRepository dao
 
     @BeforeEach
     void before() {
