@@ -84,7 +84,7 @@ class CrudDatastoreRepository implements DatastoreRepository {
     @Override
     Map<String, Object> delete(String kind, long id) {
         Key key = datastoreProvider.getDatastore().newKeyFactory().setKind(kind).newKey(id)
-        Map<String, Object> entity = read(id)
+        Map<String, Object> entity = read(kind, id)
         if (!entity)
             return null
 

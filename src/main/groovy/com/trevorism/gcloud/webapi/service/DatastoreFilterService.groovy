@@ -69,7 +69,7 @@ class DatastoreFilterService implements FilterService{
         def value = filter.value
         if(filter.field.toLowerCase() == "id"){
             filter.field = "__key__"
-            value = getDatastore().newKeyFactory().setKind(kind).newKey(Long.valueOf(value))
+            value = datastoreProvider.getDatastore().newKeyFactory().setKind(kind).newKey(Long.valueOf(value))
         }
         else if(filter.type?.toLowerCase() == FilterConstants.TYPE_BOOLEAN)
             value = Boolean.valueOf(value)
