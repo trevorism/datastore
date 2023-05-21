@@ -1,8 +1,6 @@
 package com.trevorism.gcloud.webapi.controller
 
-
 import com.google.cloud.datastore.DatastoreOptions
-import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.Query
 import com.trevorism.gcloud.dao.CrudDatastoreDAO
 import com.trevorism.gcloud.dao.DatastoreDAO
@@ -28,13 +26,18 @@ import org.slf4j.LoggerFactory
 class ObjectController {
 
     private static final Logger log = LoggerFactory.getLogger(ObjectController.class.name)
+    private CrudDatastoreDAO dao
+
+    ObjectController(CrudDatastoreDAO dao){
+        this.dao = dao
+    }
 
     @Tag(name = "Object Operations")
     @Operation(summary = "Get all types")
     @Get(value = "/", produces = MediaType.APPLICATION_JSON)
     List<String> getKinds() {
         def query = Query.newKeyQueryBuilder().setKind("__kind__").build()
-        def results = DatastoreOptions.defaultInstance.getService().run(query)
+        def results = dao.getDatastore().run(query)
         def list = []
         results.each {
             if (!it.getName().startsWith("_")) {
@@ -49,7 +52,7 @@ class ObjectController {
     @Get(value = "{kind}/{id}", produces = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
     Map<String, Object> read(String kind, long id) {
-        DatastoreDAO dao = new CrudDatastoreDAO(kind)
+        dao.setKind(kind)
         def entity = dao.read(id)
         if (!entity)
             throw new HttpStatusException(HttpStatus.NOT_FOUND, "${id} not found")
@@ -62,7 +65,7 @@ class ObjectController {
     @Get(value = "{kind}", produces = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
     List<Map<String, Object>> readAll(String kind) {
-        DatastoreDAO dao = new CrudDatastoreDAO(kind)
+        dao.setKind(kind)
         def entities = dao.readAll()
         return entities
     }
@@ -74,7 +77,7 @@ class ObjectController {
     @Secure(value = Roles.USER, allowInternal = true)
     Map<String, Object> create(String kind, @Body Map<String, Object> data) {
         try {
-            DatastoreDAO dao = new CrudDatastoreDAO(kind)
+            dao.setKind(kind)
             def entity = dao.create(data)
             return entity
         } catch (Exception e) {
@@ -88,7 +91,7 @@ class ObjectController {
     @Put(value = "{kind}/{id}", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
     Map<String, Object> update(String kind, long id, @Body Map<String, Object> data) {
-        DatastoreDAO dao = new CrudDatastoreDAO(kind)
+        dao.setKind(kind)
         def entity = dao.update(id, data)
         if (!entity)
             throw new HttpStatusException(HttpStatus.NOT_FOUND, "${id} not found")
@@ -100,7 +103,7 @@ class ObjectController {
     @Delete(value = "{kind}/{id}", produces = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
     Map<String, Object> delete(String kind, long id) {
-        DatastoreDAO dao = new CrudDatastoreDAO(kind)
+        dao.setKind(kind)
         def entity = dao.delete(id)
         if (!entity)
             throw new HttpStatusException(HttpStatus.NOT_FOUND, "${id} not found")

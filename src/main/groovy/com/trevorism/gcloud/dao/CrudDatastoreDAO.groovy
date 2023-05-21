@@ -5,25 +5,30 @@ import com.google.cloud.datastore.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.trevorism.gcloud.webapi.service.EntityList
+import io.micronaut.http.HttpRequest
+import io.micronaut.runtime.http.scope.RequestAware
+import io.micronaut.runtime.http.scope.RequestScope
+import jakarta.inject.Inject
 
 import java.text.SimpleDateFormat
 import java.util.logging.Logger
 
-/**
- * @author tbrooks
- */
-class CrudDatastoreDAO implements DatastoreDAO {
+@RequestScope
+class CrudDatastoreDAO implements DatastoreDAO, RequestAware {
+
+
+    private static final Logger log = Logger.getLogger(CrudDatastoreDAO.class.name)
+    private final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create()
+
+    @Inject
+    EntitySerializer entitySerializer
+    @Inject
+    DateFormatProvider dateFormatProvider
+
 
     private Datastore datastore
-
-    private final String kind
-    private final Gson gson
-    private static final Logger log = Logger.getLogger(CrudDatastoreDAO.class.name)
-
-    CrudDatastoreDAO(String kind) {
-        this.kind = kind.toLowerCase()
-        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create();
-    }
+    private String tenant
+    private String kind
 
     @Override
     Map<String, Object> create(Map<String, Object> data) {
@@ -31,7 +36,7 @@ class CrudDatastoreDAO implements DatastoreDAO {
 
         def toBeCreated = setEntityProperties(data)
         Entity entity = getDatastore().put(toBeCreated)
-        EntitySerializer.serialize(entity)
+        entitySerializer.serialize(entity)
     }
 
     private static void validate(Map<String, Object> jsonObject) {
@@ -65,7 +70,7 @@ class CrudDatastoreDAO implements DatastoreDAO {
         EntityQuery query = EntityQuery.Builder.newInstance().setKind(kind).build()
         def results = getDatastore().run(query)
         new EntityList(results).toList().collect {
-            EntitySerializer.serialize(it)
+            entitySerializer.serialize(it)
         }
     }
 
@@ -80,7 +85,7 @@ class CrudDatastoreDAO implements DatastoreDAO {
         Key key = getDatastore().newKeyFactory().setKind(kind).newKey(id)
 
         FullEntity<IncompleteKey> toBeUpdated = setEntityProperties(key, data)
-        return EntitySerializer.serialize(getDatastore().put(toBeUpdated))
+        return entitySerializer.serialize(getDatastore().put(toBeUpdated))
     }
 
     @Override
@@ -133,22 +138,39 @@ class CrudDatastoreDAO implements DatastoreDAO {
         return 0
     }
 
-    private Datastore getDatastore() {
-        if (!datastore)
-            datastore = DatastoreOptions.getDefaultInstance().getService()
+    Datastore getDatastore() {
+        if (!datastore) {
+            if(tenant){
+                datastore = DatastoreOptions.newBuilder().setNamespace(tenant).build().getService()
+            }
+            else{
+                datastore = DatastoreOptions.getDefaultInstance().getService()
+            }
+        }
         return datastore
     }
 
-    private static boolean isParseableToDate(Object o) {
+    private boolean isParseableToDate(Object o) {
         try {
-            DateFormatProvider.dateFormat.parse(o.toString())
+            dateFormatProvider.dateFormat.parse(o.toString())
             return true
         } catch (Exception ignored) {
             return false
         }
     }
 
-    private static Date parseDate(Object o) {
-        return DateFormatProvider.dateFormat.parse(o.toString())
+    private Date parseDate(Object o) {
+        return dateFormatProvider.dateFormat.parse(o.toString())
+    }
+
+    @Override
+    void setRequest(HttpRequest<?> request) {
+        Optional<String> wrappedTenant = request.getAttribute("tenant", String)
+        if(wrappedTenant.isPresent())
+            tenant = wrappedTenant.get()
+    }
+
+    void setKind(String kind){
+        this.kind = kind
     }
 }

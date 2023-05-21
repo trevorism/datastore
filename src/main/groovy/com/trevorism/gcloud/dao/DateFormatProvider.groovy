@@ -2,6 +2,11 @@ package com.trevorism.gcloud.dao
 
 import java.text.SimpleDateFormat
 
+@jakarta.inject.Singleton
 class DateFormatProvider {
-    static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+
+    SimpleDateFormat getDateFormat() {
+        return dateFormat
+    }
 }

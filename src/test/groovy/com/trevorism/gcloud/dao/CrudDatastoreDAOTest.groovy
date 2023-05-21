@@ -1,6 +1,8 @@
 package com.trevorism.gcloud.dao
 
 import com.google.cloud.datastore.*
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import jakarta.inject.Inject
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test
 /**
  * @author tbrooks
  */
+@MicronautTest
 class CrudDatastoreDAOTest {
 
     private final String kind = "TestWithData"
@@ -17,11 +20,14 @@ class CrudDatastoreDAOTest {
     private final long id1 = 1
     private final long id2 = 2
 
-    private final CrudDatastoreDAO dao
+    @Inject
+    private CrudDatastoreDAO dao
 
-    CrudDatastoreDAOTest() {
+    @BeforeEach
+    void before() {
         def keyFactory = new KeyFactory("trevorism")
-        dao = new CrudDatastoreDAO(kind)
+        dao.setKind(kind)
+
         dao.datastore = [newKeyFactory: { keyFactory },
                          put          : { obj ->
                              def entity = new Entity(obj)

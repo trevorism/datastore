@@ -2,25 +2,34 @@ package com.trevorism.gcloud.dao
 
 import com.google.cloud.datastore.Datastore
 import com.google.cloud.datastore.Entity
-import com.google.cloud.datastore.FullEntity
 import com.google.cloud.datastore.Key
 import com.google.cloud.datastore.KeyFactory
 import com.google.cloud.datastore.QueryResults
+import io.micronaut.http.client.HttpClient
+import io.micronaut.http.client.annotation.Client
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import jakarta.inject.Inject
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertThrows
 
-/**
- * @author tbrooks
- */
+@MicronautTest
 class EmptyDatabaseCrudDatastoreDAOTest {
 
     private final String kind = "TestSample"
-    private final CrudDatastoreDAO dao
+    @Inject
+    private CrudDatastoreDAO dao
+
+    @Inject
+    @Client("/")
+    HttpClient httpClient
+
     def myData = []
 
-    EmptyDatabaseCrudDatastoreDAOTest(){
-        dao = new CrudDatastoreDAO(kind)
+    @BeforeEach
+    void before(){
+        dao.setKind(kind)
         def keyFactory = new KeyFactory("trevorism")
         dao.datastore = [newKeyFactory: { keyFactory },
                          put          : { obj ->
@@ -65,7 +74,7 @@ class EmptyDatabaseCrudDatastoreDAOTest {
         !result
     }
 
-    //@Test
+    @Test
     void testCreateSimple() {
         def jsonObject = [:]
         jsonObject.put("name", "newName")
