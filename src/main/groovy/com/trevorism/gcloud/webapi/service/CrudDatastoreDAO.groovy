@@ -1,4 +1,4 @@
-package com.trevorism.gcloud.dao
+package com.trevorism.gcloud.webapi.service
 
 import com.google.cloud.Timestamp
 import com.google.cloud.datastore.*
@@ -7,7 +7,6 @@ import com.google.gson.GsonBuilder
 import com.trevorism.gcloud.bean.DatastoreProvider
 import com.trevorism.gcloud.bean.DateFormatProvider
 import com.trevorism.gcloud.bean.EntitySerializer
-import com.trevorism.gcloud.webapi.service.EntityList
 import jakarta.inject.Inject
 
 import java.util.logging.Logger

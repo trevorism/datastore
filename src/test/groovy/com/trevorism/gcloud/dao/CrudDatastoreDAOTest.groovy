@@ -1,6 +1,7 @@
 package com.trevorism.gcloud.dao
 
 import com.google.cloud.datastore.*
+import com.trevorism.gcloud.webapi.service.CrudDatastoreDAO
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.BeforeEach

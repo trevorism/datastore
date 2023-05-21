@@ -2,7 +2,7 @@ package com.trevorism.gcloud.webapi.controller
 
 import com.google.cloud.datastore.Query
 import com.trevorism.gcloud.bean.DatastoreProvider
-import com.trevorism.gcloud.dao.CrudDatastoreDAO
+import com.trevorism.gcloud.webapi.service.CrudDatastoreDAO
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
 import io.micronaut.http.HttpStatus

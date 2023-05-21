@@ -1,4 +1,4 @@
-package com.trevorism.gcloud.dao
+package com.trevorism.gcloud.webapi.service
 
 import com.google.cloud.datastore.Datastore
 

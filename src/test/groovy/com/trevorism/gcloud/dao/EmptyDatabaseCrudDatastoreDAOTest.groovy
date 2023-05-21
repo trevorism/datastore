@@ -5,6 +5,7 @@ import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.Key
 import com.google.cloud.datastore.KeyFactory
 import com.google.cloud.datastore.QueryResults
+import com.trevorism.gcloud.webapi.service.CrudDatastoreDAO
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
