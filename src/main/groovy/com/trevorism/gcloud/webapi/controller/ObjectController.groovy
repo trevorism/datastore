@@ -1,9 +1,8 @@
 package com.trevorism.gcloud.webapi.controller
 
-import com.google.cloud.datastore.DatastoreOptions
 import com.google.cloud.datastore.Query
+import com.trevorism.gcloud.bean.DatastoreProvider
 import com.trevorism.gcloud.dao.CrudDatastoreDAO
-import com.trevorism.gcloud.dao.DatastoreDAO
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
 import io.micronaut.http.HttpStatus
@@ -18,6 +17,7 @@ import io.micronaut.http.annotation.Status
 import io.micronaut.http.exceptions.HttpStatusException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.inject.Inject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -26,18 +26,19 @@ import org.slf4j.LoggerFactory
 class ObjectController {
 
     private static final Logger log = LoggerFactory.getLogger(ObjectController.class.name)
-    private CrudDatastoreDAO dao
 
-    ObjectController(CrudDatastoreDAO dao){
-        this.dao = dao
-    }
+    @Inject
+    CrudDatastoreDAO dao
+
+    @Inject
+    DatastoreProvider datastoreProvider
 
     @Tag(name = "Object Operations")
     @Operation(summary = "Get all types")
     @Get(value = "/", produces = MediaType.APPLICATION_JSON)
     List<String> getKinds() {
         def query = Query.newKeyQueryBuilder().setKind("__kind__").build()
-        def results = dao.getDatastore().run(query)
+        def results = datastoreProvider.datastore.run(query)
         def list = []
         results.each {
             if (!it.getName().startsWith("_")) {
@@ -52,8 +53,7 @@ class ObjectController {
     @Get(value = "{kind}/{id}", produces = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
     Map<String, Object> read(String kind, long id) {
-        dao.setKind(kind)
-        def entity = dao.read(id)
+        def entity = dao.read(kind, id)
         if (!entity)
             throw new HttpStatusException(HttpStatus.NOT_FOUND, "${id} not found")
 
@@ -65,8 +65,7 @@ class ObjectController {
     @Get(value = "{kind}", produces = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
     List<Map<String, Object>> readAll(String kind) {
-        dao.setKind(kind)
-        def entities = dao.readAll()
+        def entities = dao.readAll(kind)
         return entities
     }
 
@@ -77,8 +76,7 @@ class ObjectController {
     @Secure(value = Roles.USER, allowInternal = true)
     Map<String, Object> create(String kind, @Body Map<String, Object> data) {
         try {
-            dao.setKind(kind)
-            def entity = dao.create(data)
+            def entity = dao.create(kind, data)
             return entity
         } catch (Exception e) {
             log.error("Unable to create ${kind}", e)
@@ -91,8 +89,7 @@ class ObjectController {
     @Put(value = "{kind}/{id}", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
     Map<String, Object> update(String kind, long id, @Body Map<String, Object> data) {
-        dao.setKind(kind)
-        def entity = dao.update(id, data)
+        def entity = dao.update(kind, id, data)
         if (!entity)
             throw new HttpStatusException(HttpStatus.NOT_FOUND, "${id} not found")
         return entity
@@ -103,8 +100,7 @@ class ObjectController {
     @Delete(value = "{kind}/{id}", produces = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
     Map<String, Object> delete(String kind, long id) {
-        dao.setKind(kind)
-        def entity = dao.delete(id)
+        def entity = dao.delete(kind, id)
         if (!entity)
             throw new HttpStatusException(HttpStatus.NOT_FOUND, "${id} not found")
         return entity

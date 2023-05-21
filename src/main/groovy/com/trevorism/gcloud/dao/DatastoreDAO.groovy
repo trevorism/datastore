@@ -7,14 +7,13 @@ import com.google.cloud.datastore.Datastore
  */
 interface DatastoreDAO {
 
-    Map<String, Object> create(Map<String, Object> data)
+    Map<String, Object> create(String kind, Map<String, Object> data)
 
-    Map<String, Object> read(long id)
-    List<Map<String, Object>> readAll()
+    Map<String, Object> read(String kind, long id)
+    List<Map<String, Object>> readAll(String kind)
 
-    Map<String, Object> update(long id, Map<String, Object>  data)
+    Map<String, Object> update(String kind, long id, Map<String, Object>  data)
 
-    Map<String, Object> delete(long id)
+    Map<String, Object> delete(String kind, long id)
 
-    Datastore getDatastore()
 }

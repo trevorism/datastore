@@ -4,18 +4,16 @@ import com.google.cloud.Timestamp
 import com.google.cloud.datastore.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.trevorism.gcloud.bean.DatastoreProvider
+import com.trevorism.gcloud.bean.DateFormatProvider
+import com.trevorism.gcloud.bean.EntitySerializer
 import com.trevorism.gcloud.webapi.service.EntityList
-import io.micronaut.http.HttpRequest
-import io.micronaut.runtime.http.scope.RequestAware
-import io.micronaut.runtime.http.scope.RequestScope
 import jakarta.inject.Inject
 
-import java.text.SimpleDateFormat
 import java.util.logging.Logger
 
-@RequestScope
-class CrudDatastoreDAO implements DatastoreDAO, RequestAware {
-
+@jakarta.inject.Singleton
+class CrudDatastoreDAO implements DatastoreDAO {
 
     private static final Logger log = Logger.getLogger(CrudDatastoreDAO.class.name)
     private final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create()
@@ -24,18 +22,14 @@ class CrudDatastoreDAO implements DatastoreDAO, RequestAware {
     EntitySerializer entitySerializer
     @Inject
     DateFormatProvider dateFormatProvider
-
-
-    private Datastore datastore
-    private String tenant
-    private String kind
+    @Inject
+    DatastoreProvider datastoreProvider
 
     @Override
-    Map<String, Object> create(Map<String, Object> data) {
+    Map<String, Object> create(String kind, Map<String, Object> data) {
         validate(data)
-
-        def toBeCreated = setEntityProperties(data)
-        Entity entity = getDatastore().put(toBeCreated)
+        def toBeCreated = setEntityProperties(kind, data)
+        Entity entity = datastoreProvider.getDatastore().put(toBeCreated)
         entitySerializer.serialize(entity)
     }
 
@@ -55,10 +49,10 @@ class CrudDatastoreDAO implements DatastoreDAO, RequestAware {
     }
 
     @Override
-    Map<String, Object> read(long id) {
-        Key key = getDatastore().newKeyFactory().setKind(kind).newKey(id)
+    Map<String, Object> read(String kind, long id) {
+        Key key = datastoreProvider.getDatastore().newKeyFactory().setKind(kind).newKey(id)
         try {
-            return EntitySerializer.serialize(getDatastore().get(key))
+            return entitySerializer.serialize(datastoreProvider.getDatastore().get(key))
         } catch (Exception ignored) {
             log.fine("Unable to get entity with id: $id")
             return null
@@ -66,41 +60,41 @@ class CrudDatastoreDAO implements DatastoreDAO, RequestAware {
     }
 
     @Override
-    List<Map<String, Object>> readAll() {
-        EntityQuery query = EntityQuery.Builder.newInstance().setKind(kind).build()
-        def results = getDatastore().run(query)
+    List<Map<String, Object>> readAll(String kind) {
+        EntityQuery query = EntityQuery.newEntityQueryBuilder().setKind(kind).build()
+        def results = datastoreProvider.getDatastore().run(query)
         new EntityList(results).toList().collect {
             entitySerializer.serialize(it)
         }
     }
 
     @Override
-    Map<String, Object> update(long id, Map<String, Object> data) {
-        Map<String, Object> entityExists = read(id)
+    Map<String, Object> update(String kind, long id, Map<String, Object> data) {
+        Map<String, Object> entityExists = read(kind, id)
 
         if (!entityExists)
             return null
 
         data.put("id", id)
-        Key key = getDatastore().newKeyFactory().setKind(kind).newKey(id)
+        Key key = datastoreProvider.getDatastore().newKeyFactory().setKind(kind).newKey(id)
 
         FullEntity<IncompleteKey> toBeUpdated = setEntityProperties(key, data)
-        return entitySerializer.serialize(getDatastore().put(toBeUpdated))
+        return entitySerializer.serialize(datastoreProvider.getDatastore().put(toBeUpdated))
     }
 
     @Override
-    Map<String, Object> delete(long id) {
-        Key key = getDatastore().newKeyFactory().setKind(kind).newKey(id)
+    Map<String, Object> delete(String kind, long id) {
+        Key key = datastoreProvider.getDatastore().newKeyFactory().setKind(kind).newKey(id)
         Map<String, Object> entity = read(id)
         if (!entity)
             return null
 
-        getDatastore().delete(key)
+        datastoreProvider.getDatastore().delete(key)
         return entity
     }
 
-    private FullEntity<IncompleteKey> setEntityProperties(Map<String, Object> data) {
-        def key = createEntityKey(data)
+    private FullEntity<IncompleteKey> setEntityProperties(String kind, Map<String, Object> data) {
+        def key = createEntityKey(kind, data)
         setEntityProperties(key, data)
     }
 
@@ -119,9 +113,9 @@ class CrudDatastoreDAO implements DatastoreDAO, RequestAware {
         return builder.build()
     }
 
-    private IncompleteKey createEntityKey(Map<String, Object> data) {
+    private IncompleteKey createEntityKey(String kind, Map<String, Object> data) {
         long id = getIdFromObject(data)
-        KeyFactory keyFactory = getDatastore().newKeyFactory().setKind(kind)
+        KeyFactory keyFactory = datastoreProvider.getDatastore().newKeyFactory().setKind(kind)
 
         if (id != 0)
             return keyFactory.newKey(id)
@@ -138,18 +132,6 @@ class CrudDatastoreDAO implements DatastoreDAO, RequestAware {
         return 0
     }
 
-    Datastore getDatastore() {
-        if (!datastore) {
-            if(tenant){
-                datastore = DatastoreOptions.newBuilder().setNamespace(tenant).build().getService()
-            }
-            else{
-                datastore = DatastoreOptions.getDefaultInstance().getService()
-            }
-        }
-        return datastore
-    }
-
     private boolean isParseableToDate(Object o) {
         try {
             dateFormatProvider.dateFormat.parse(o.toString())
@@ -163,14 +145,4 @@ class CrudDatastoreDAO implements DatastoreDAO, RequestAware {
         return dateFormatProvider.dateFormat.parse(o.toString())
     }
 
-    @Override
-    void setRequest(HttpRequest<?> request) {
-        Optional<String> wrappedTenant = request.getAttribute("tenant", String)
-        if(wrappedTenant.isPresent())
-            tenant = wrappedTenant.get()
-    }
-
-    void setKind(String kind){
-        this.kind = kind
-    }
 }

@@ -1,4 +1,4 @@
-package com.trevorism.gcloud.dao
+package com.trevorism.gcloud.bean
 
 import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.ValueType

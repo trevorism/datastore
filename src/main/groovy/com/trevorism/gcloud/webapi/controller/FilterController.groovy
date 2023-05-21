@@ -11,12 +11,14 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.inject.Inject
 
 
 @Controller("/filter")
 class FilterController {
 
-    private FilterService filterService = new DatastoreFilterService()
+    @Inject
+    FilterService filterService
 
     @Tag(name = "Filter Operations")
     @Operation(summary = "Perform a filter data operation **Secure")

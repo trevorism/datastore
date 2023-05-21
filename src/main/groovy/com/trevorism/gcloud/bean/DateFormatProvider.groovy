@@ -1,4 +1,4 @@
-package com.trevorism.gcloud.dao
+package com.trevorism.gcloud.bean
 
 import java.text.SimpleDateFormat
 
