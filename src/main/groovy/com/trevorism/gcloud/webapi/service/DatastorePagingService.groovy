@@ -1,13 +1,15 @@
 package com.trevorism.gcloud.webapi.service
 
-import com.google.cloud.datastore.Datastore
-import com.google.cloud.datastore.DatastoreOptions
 import com.google.cloud.datastore.EntityQuery
+import com.trevorism.gcloud.bean.DatastoreProvider
 import com.trevorism.gcloud.webapi.model.paging.Page
+import jakarta.inject.Inject
 
+@jakarta.inject.Singleton
 class DatastorePagingService implements PagingService{
 
-    private Datastore datastore
+    @Inject
+    DatastoreProvider datastoreProvider
 
     @Override
     def page(Page pagingRequest, String kind) {
@@ -19,13 +21,8 @@ class DatastorePagingService implements PagingService{
         if(pagingRequest.pageSize > 0 && pagingRequest.page > 0){
             queryBuilder = queryBuilder.setLimit(pagingRequest.pageSize).setOffset((pagingRequest.page-1) * pagingRequest.pageSize)
         }
-        def results = getDatastore().run(queryBuilder.build())
+        def results = datastoreProvider.getDatastore().run(queryBuilder.build())
         new EntityList(results).toList()
     }
 
-    private Datastore getDatastore() {
-        if (!datastore)
-            datastore = DatastoreOptions.getDefaultInstance().getService()
-        return datastore
-    }
 }

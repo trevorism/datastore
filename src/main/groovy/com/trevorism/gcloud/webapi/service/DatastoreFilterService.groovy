@@ -7,21 +7,23 @@ import com.google.cloud.datastore.EntityQuery
 import com.google.cloud.datastore.StructuredQuery
 import com.google.cloud.datastore.StructuredQuery.Filter
 import com.google.cloud.datastore.StructuredQuery.PropertyFilter
+import com.trevorism.gcloud.bean.DatastoreProvider
+import com.trevorism.gcloud.bean.DateFormatProvider
 import com.trevorism.gcloud.webapi.model.filtering.ComplexFilter
 import com.trevorism.gcloud.webapi.model.filtering.FilterConstants
 import com.trevorism.gcloud.webapi.model.filtering.SimpleFilter
+import jakarta.inject.Inject
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
+@jakarta.inject.Singleton
 class DatastoreFilterService implements FilterService{
 
-    private Datastore datastore
-    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-
-    DatastoreFilterService(){
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
-    }
+    @Inject
+    DateFormatProvider dateFormatProvider
+    @Inject
+    DatastoreProvider datastoreProvider
 
     @Override
     def filter(ComplexFilter request, String kind) {
@@ -34,15 +36,9 @@ class DatastoreFilterService implements FilterService{
         }
 
         def query = queryBuilder.build()
-        def results = getDatastore().run(query)
+        def results = datastoreProvider.getDatastore().run(query)
         new EntityList(results).toList()
 
-    }
-
-    Datastore getDatastore() {
-        if (!datastore)
-            datastore = DatastoreOptions.getDefaultInstance().getService()
-        return datastore
     }
 
     private Filter createQueryFilter(ComplexFilter complexFilter, String kind) {
@@ -73,12 +69,12 @@ class DatastoreFilterService implements FilterService{
         def value = filter.value
         if(filter.field.toLowerCase() == "id"){
             filter.field = "__key__"
-            value = getDatastore().newKeyFactory().setKind(kind).newKey(Long.valueOf(value))
+            value = datastoreProvider.getDatastore().newKeyFactory().setKind(kind).newKey(Long.valueOf(value))
         }
         else if(filter.type?.toLowerCase() == FilterConstants.TYPE_BOOLEAN)
             value = Boolean.valueOf(value)
         else if(filter.type?.toLowerCase() == FilterConstants.TYPE_DATE)
-            value = Timestamp.of(dateFormat.parse(value))
+            value = Timestamp.of(dateFormatProvider.getDateFormat().parse(value))
         else if(filter.type?.toLowerCase() == FilterConstants.TYPE_NUMBER)
             value = Double.valueOf(value)
 

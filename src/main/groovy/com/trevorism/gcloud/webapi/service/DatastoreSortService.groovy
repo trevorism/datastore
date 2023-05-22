@@ -1,14 +1,16 @@
 package com.trevorism.gcloud.webapi.service
 
-import com.google.cloud.datastore.Datastore
-import com.google.cloud.datastore.DatastoreOptions
 import com.google.cloud.datastore.EntityQuery
 import com.google.cloud.datastore.StructuredQuery.OrderBy
+import com.trevorism.gcloud.bean.DatastoreProvider
 import com.trevorism.gcloud.webapi.model.sorting.ComplexSort
+import jakarta.inject.Inject
 
+@jakarta.inject.Singleton
 class DatastoreSortService implements SortService {
 
-    private Datastore datastore
+    @Inject
+    DatastoreProvider datastoreProvider
 
     @Override
     def sort(ComplexSort request, String kind) {
@@ -24,14 +26,9 @@ class DatastoreSortService implements SortService {
         }
 
         def entityQuery = queryBuilder.setOrderBy(*list).build()
-        def results = getDatastore().run(entityQuery)
+        def results = datastoreProvider.getDatastore().run(entityQuery)
         new EntityList(results).toList()
 
     }
 
-    private Datastore getDatastore() {
-        if (!datastore)
-            datastore = DatastoreOptions.getDefaultInstance().getService()
-        return datastore
-    }
 }

@@ -5,6 +5,8 @@ import com.google.cloud.datastore.FullEntity
 import com.google.cloud.datastore.KeyFactory
 import com.google.cloud.datastore.QueryResults
 import com.google.cloud.datastore.StructuredQuery
+import com.trevorism.gcloud.bean.DatastoreProvider
+import com.trevorism.gcloud.bean.DateFormatProvider
 import com.trevorism.gcloud.webapi.model.filtering.ComplexFilter
 import com.trevorism.gcloud.webapi.model.filtering.FilterConstants
 import com.trevorism.gcloud.webapi.model.filtering.SimpleFilter
@@ -21,15 +23,14 @@ class DatastoreFilterServiceTest {
 
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
 
-    DatastoreFilterServiceTest()
-    {
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
-    }
-
     @Test
     void testFilter() {
         DatastoreFilterService service = new DatastoreFilterService()
-        service.datastore = { q -> [new FullEntity.Builder(), new FullEntity.Builder()] as QueryResults } as Datastore
+        service.datastoreProvider = { ->
+            { q -> [FullEntity.newBuilder(), FullEntity.newBuilder()] as QueryResults } as Datastore
+        } as DatastoreProvider
+        service.dateFormatProvider = { -> dateFormat } as DateFormatProvider
+
         String dateString = dateFormat.format(Date.from(LocalDateTime.of(2012,1,1,0,0,0).toInstant(ZoneOffset.UTC)))
 
         def results = service.filter(new ComplexFilter(type: FilterConstants.AND, simpleFilters: [
@@ -80,6 +81,7 @@ class DatastoreFilterServiceTest {
     @Test
     void testCreateSimpleDateFilter() {
         DatastoreFilterService service = new DatastoreFilterService()
+        service.dateFormatProvider = { -> dateFormat } as DateFormatProvider
         def now = Instant.now()
 
         StructuredQuery.Filter filter = service.createSimpleFilter(
@@ -92,12 +94,9 @@ class DatastoreFilterServiceTest {
 
     @Test
     void testCreateIdFilter() {
-        DatastoreFilterService service = new DatastoreFilterService(){
-            @Override
-            Datastore getDatastore() {
-                [newKeyFactory: { new KeyFactory("trevorism-gcloud")}] as Datastore
-            }
-        }
+        DatastoreFilterService service = new DatastoreFilterService()
+        service.datastoreProvider = { -> [newKeyFactory: { new KeyFactory("trevorism-data")}] as Datastore } as DatastoreProvider
+
         def simpleFilter = new SimpleFilter(type: FilterConstants.TYPE_NUMBER, field: "id", operator: FilterConstants.OPERATOR_EQUAL, value: "59234923")
         StructuredQuery.Filter filter = service.createSimpleFilter(simpleFilter, "kind")
 

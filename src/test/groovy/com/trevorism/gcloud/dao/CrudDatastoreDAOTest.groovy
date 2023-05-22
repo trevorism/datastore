@@ -1,28 +1,39 @@
 package com.trevorism.gcloud.dao
 
 import com.google.cloud.datastore.*
+import com.trevorism.gcloud.bean.DatastoreProvider
+import com.trevorism.gcloud.bean.DateFormatProvider
+import com.trevorism.gcloud.webapi.service.CrudDatastoreRepository
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import jakarta.inject.Inject
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 
 
 /**
  * @author tbrooks
  */
+@MicronautTest
 class CrudDatastoreDAOTest {
 
     private final String kind = "TestWithData"
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
 
     private final def myData = []
 
     private final long id1 = 1
     private final long id2 = 2
 
-    private final CrudDatastoreDAO dao
+    @Inject
+    private CrudDatastoreRepository dao
 
-    CrudDatastoreDAOTest() {
+    @BeforeEach
+    void before() {
         def keyFactory = new KeyFactory("trevorism")
-        dao = new CrudDatastoreDAO(kind)
-        dao.datastore = [newKeyFactory: { keyFactory },
+        dao.datastoreProvider = { -> [newKeyFactory: { keyFactory },
                          put          : { obj ->
                              def entity = new Entity(obj)
                              def found = myData.find { it -> it.key.getId() == obj.key.getId() }
@@ -38,6 +49,8 @@ class CrudDatastoreDAOTest {
                          delete       : { it -> myData.remove(0) },
                          get          : { Key key -> myData.find { it -> it.key.getId() == key.getId() } }
         ] as Datastore
+        } as DatastoreProvider
+        dao.dateFormatProvider = { -> dateFormat } as DateFormatProvider
     }
 
     @BeforeEach
@@ -45,33 +58,33 @@ class CrudDatastoreDAOTest {
         def jsonObject = [:]
         jsonObject.put("name", "sample1")
         jsonObject.put("id", id1)
-        dao.create(jsonObject)
+        dao.create(kind, jsonObject)
 
         def jsonObject2 = [:]
         jsonObject2.put("name", "sample2")
         jsonObject2.put("id", id2)
-        dao.create(jsonObject2)
+        dao.create(kind, jsonObject2)
     }
 
     @Test
     void testSimple(){
-        def list = dao.readAll()
+        def list = dao.readAll(kind)
         assert list
     }
 
     @Test
     void testReadAll() {
-        def results = dao.readAll()
+        def results = dao.readAll(kind)
         assert results.size() == 2
     }
 
     @Test
     void testRead() {
-        def result = dao.read(id1)
+        def result = dao.read(kind, id1)
         assert result.get("id") == id1
         assert result.get("name") == "sample1"
 
-        def result2 = dao.read(id2)
+        def result2 = dao.read(kind, id2)
 
         assert result2.get("id") == id2
         assert result2.get("name") == "sample2"
@@ -82,10 +95,10 @@ class CrudDatastoreDAOTest {
         Map<String,Object> jsonObject = [:]
         jsonObject.put("name", "sample77")
 
-        def result = dao.update(id1, jsonObject)
+        def result = dao.update(kind, id1, jsonObject)
         assert result.get("name") == "sample77"
 
-        def result2 = dao.read(id1)
+        def result2 = dao.read(kind, id1)
         assert result2.get("name") == "sample77"
     }
 
@@ -95,18 +108,18 @@ class CrudDatastoreDAOTest {
         jsonObject.put("name", "sample22")
         jsonObject.put("id", "invalid1")
 
-        def result = dao.update(id1, jsonObject)
+        def result = dao.update(kind, id1, jsonObject)
         assert result.get("id") == id1
 
-        def result2 = dao.read(id1)
+        def result2 = dao.read(kind, id1)
         assert result2.get("id") == id1
     }
 
     @Test
     void testDelete() {
-        dao.delete(id1)
-        assert dao.readAll().size() == 1
-        dao.delete(id2)
-        assert !(dao.readAll())
+        dao.delete(kind, id1)
+        assert dao.readAll(kind).size() == 1
+        dao.delete(kind, id2)
+        assert !(dao.readAll(kind))
     }
 }
