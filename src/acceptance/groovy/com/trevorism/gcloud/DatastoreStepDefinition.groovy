@@ -32,7 +32,7 @@ When(~/^the invalid test object is created$/) { ->
 }
 
 Then(~/^an error is thrown, indicating the failure$/) { ->
-    assert invalidResultJson.contains("Error")
+    assert invalidResultJson.contains("400")
 }
 
 Then(~/^the object can found by listing all objects$/) { ->
