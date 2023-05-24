@@ -11,12 +11,14 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.inject.Inject
 
 
 @Controller("/page")
 class PageController {
 
-    PagingService pagingService = new DatastorePagingService()
+    @Inject
+    PagingService pagingService
 
     @Tag(name = "Page Operations")
     @Operation(summary = "Perform a data operation and get a result **Secure")

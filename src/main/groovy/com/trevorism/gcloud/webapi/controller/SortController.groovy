@@ -10,11 +10,13 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.inject.Inject
 
 @Controller("/sort")
 class SortController {
 
-    private SortService sortService = new DatastoreSortService()
+    @Inject
+    SortService sortService
 
     @Tag(name = "Sort Operations")
     @Operation(summary = "Perform a data operation and get a result **Secure")
