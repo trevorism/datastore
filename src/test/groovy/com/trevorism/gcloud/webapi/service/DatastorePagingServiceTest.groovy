@@ -4,6 +4,7 @@ import com.google.cloud.datastore.Datastore
 import com.google.cloud.datastore.FullEntity
 import com.google.cloud.datastore.QueryResults
 import com.trevorism.gcloud.bean.DatastoreProvider
+import com.trevorism.gcloud.bean.EntitySerializer
 import com.trevorism.gcloud.webapi.model.paging.Page
 import org.junit.jupiter.api.Test
 
@@ -18,7 +19,7 @@ class DatastorePagingServiceTest {
         service.datastoreProvider = { ->
             { q -> [FullEntity.newBuilder(), FullEntity.newBuilder()] as QueryResults } as Datastore
         } as DatastoreProvider
-
+        service.entitySerializer = new EntitySerializer()
         def results = service.page(new Page(page: 1, pageSize: 2), "CommentModel")
         assert results.size() == 2
     }
@@ -29,7 +30,7 @@ class DatastorePagingServiceTest {
         service.datastoreProvider = { ->
             { q -> [FullEntity.newBuilder(), FullEntity.newBuilder()] as QueryResults } as Datastore
         } as DatastoreProvider
-
+        service.entitySerializer = new EntitySerializer()
         def results = service.page(new Page(limit: 2), "CommentModel")
         assert results.size() == 2
     }

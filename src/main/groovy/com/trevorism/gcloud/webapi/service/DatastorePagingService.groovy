@@ -2,6 +2,7 @@ package com.trevorism.gcloud.webapi.service
 
 import com.google.cloud.datastore.EntityQuery
 import com.trevorism.gcloud.bean.DatastoreProvider
+import com.trevorism.gcloud.bean.EntitySerializer
 import com.trevorism.gcloud.webapi.model.paging.Page
 import jakarta.inject.Inject
 
@@ -10,6 +11,8 @@ class DatastorePagingService implements PagingService{
 
     @Inject
     DatastoreProvider datastoreProvider
+    @Inject
+    EntitySerializer entitySerializer
 
     @Override
     def page(Page pagingRequest, String kind) {
@@ -22,7 +25,7 @@ class DatastorePagingService implements PagingService{
             queryBuilder = queryBuilder.setLimit(pagingRequest.pageSize).setOffset((pagingRequest.page-1) * pagingRequest.pageSize)
         }
         def results = datastoreProvider.getDatastore().run(queryBuilder.build())
-        new EntityList(results).toList()
+        new EntityList(entitySerializer, results).toList()
     }
 
 }

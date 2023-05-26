@@ -1,12 +1,14 @@
 package com.trevorism.gcloud.webapi.service
 
 import com.google.cloud.datastore.Datastore
+import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.FullEntity
 import com.google.cloud.datastore.KeyFactory
 import com.google.cloud.datastore.QueryResults
 import com.google.cloud.datastore.StructuredQuery
 import com.trevorism.gcloud.bean.DatastoreProvider
 import com.trevorism.gcloud.bean.DateFormatProvider
+import com.trevorism.gcloud.bean.EntitySerializer
 import com.trevorism.gcloud.webapi.model.filtering.ComplexFilter
 import com.trevorism.gcloud.webapi.model.filtering.FilterConstants
 import com.trevorism.gcloud.webapi.model.filtering.SimpleFilter
@@ -27,10 +29,10 @@ class DatastoreFilterServiceTest {
     void testFilter() {
         DatastoreFilterService service = new DatastoreFilterService()
         service.datastoreProvider = { ->
-            { q -> [FullEntity.newBuilder(), FullEntity.newBuilder()] as QueryResults } as Datastore
+            { q -> [Entity.newBuilder().build(), Entity.newBuilder().build()].iterator() as QueryResults } as Datastore
         } as DatastoreProvider
         service.dateFormatProvider = { -> dateFormat } as DateFormatProvider
-
+        service.entitySerializer = new EntitySerializer()
         String dateString = dateFormat.format(Date.from(LocalDateTime.of(2012,1,1,0,0,0).toInstant(ZoneOffset.UTC)))
 
         def results = service.filter(new ComplexFilter(type: FilterConstants.AND, simpleFilters: [

@@ -3,6 +3,7 @@ package com.trevorism.gcloud.webapi.service
 import com.google.cloud.datastore.EntityQuery
 import com.google.cloud.datastore.StructuredQuery.OrderBy
 import com.trevorism.gcloud.bean.DatastoreProvider
+import com.trevorism.gcloud.bean.EntitySerializer
 import com.trevorism.gcloud.webapi.model.sorting.ComplexSort
 import jakarta.inject.Inject
 
@@ -11,6 +12,8 @@ class DatastoreSortService implements SortService {
 
     @Inject
     DatastoreProvider datastoreProvider
+    @Inject
+    EntitySerializer entitySerializer
 
     @Override
     def sort(ComplexSort request, String kind) {
@@ -27,7 +30,7 @@ class DatastoreSortService implements SortService {
 
         def entityQuery = queryBuilder.setOrderBy(*list).build()
         def results = datastoreProvider.getDatastore().run(entityQuery)
-        new EntityList(results).toList()
+        new EntityList(entitySerializer, results).toList()
 
     }
 

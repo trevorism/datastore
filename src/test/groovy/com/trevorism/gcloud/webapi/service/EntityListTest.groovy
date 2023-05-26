@@ -11,7 +11,7 @@ class EntityListTest {
 
     @Test
     void testToList() {
-        TestQueryResults results = [FullEntity.Builder.newInstance(), FullEntity.Builder.newInstance()] as TestQueryResults
+        TestQueryResults results = [FullEntity.newBuilder().build(), FullEntity.newBuilder().build()] as TestQueryResults
         EntityList el = new EntityList(results)
         assert el.toList().size() == 2
     }
