@@ -55,7 +55,7 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     implementation 'org.slf4j:slf4j-simple:2.0.6'
 
-    implementation 'com.trevorism:micronaut-security-utils:0.9.3'
+    implementation 'com.trevorism:micronaut-security-utils:0.9.4'
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.google.cloud:google-cloud-datastore:2.14.6'
 
