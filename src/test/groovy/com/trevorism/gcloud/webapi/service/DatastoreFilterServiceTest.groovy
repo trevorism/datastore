@@ -24,13 +24,14 @@ import java.time.ZoneOffset
 class DatastoreFilterServiceTest {
 
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    def keyFactory = new KeyFactory("trevorism")
 
     @Test
     void testFilter() {
+        keyFactory.kind = "testsample"
         DatastoreFilterService service = new DatastoreFilterService()
-        service.datastoreProvider = { ->
-            { q -> [Entity.newBuilder().build(), Entity.newBuilder().build()].iterator() as QueryResults } as Datastore
-        } as DatastoreProvider
+        service.datastoreProvider = new TestDatastoreProvider([Entity.newBuilder(keyFactory.newKey(3)).build(),
+                                                               Entity.newBuilder(keyFactory.newKey(4)).build()])
         service.dateFormatProvider = { -> dateFormat } as DateFormatProvider
         service.entitySerializer = new EntitySerializer()
         String dateString = dateFormat.format(Date.from(LocalDateTime.of(2012,1,1,0,0,0).toInstant(ZoneOffset.UTC)))

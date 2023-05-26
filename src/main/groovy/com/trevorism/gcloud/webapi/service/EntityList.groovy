@@ -1,7 +1,6 @@
 package com.trevorism.gcloud.webapi.service
 
 import com.google.cloud.datastore.Entity
-import com.google.cloud.datastore.FullEntity
 import com.google.cloud.datastore.QueryResults
 import com.trevorism.gcloud.bean.EntitySerializer
 
@@ -21,5 +20,6 @@ class EntityList {
             Entity entity = results.next()
             list << entitySerializer.serialize(entity)
         }
+        return list
     }
 }
