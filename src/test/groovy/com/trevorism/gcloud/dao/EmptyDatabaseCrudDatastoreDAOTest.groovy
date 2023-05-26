@@ -8,6 +8,7 @@ import com.google.cloud.datastore.QueryResults
 import com.trevorism.gcloud.bean.DatastoreProvider
 import com.trevorism.gcloud.bean.DateFormatProvider
 import com.trevorism.gcloud.webapi.service.CrudDatastoreRepository
+import com.trevorism.gcloud.webapi.service.TestDatastoreProvider
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
@@ -29,27 +30,9 @@ class EmptyDatabaseCrudDatastoreDAOTest {
     @Inject
     private CrudDatastoreRepository dao
 
-    def myData = []
-
     @BeforeEach
     void before(){
-        def keyFactory = new KeyFactory("trevorism")
-        dao.datastoreProvider = { -> [newKeyFactory: { keyFactory },
-                         put          : { obj ->
-                             def entity = new Entity(obj)
-                             def found = myData.find { it -> it.key.getId() == obj.key.getId() }
-                             if (found) {
-                                 myData.remove(found)
-                                 myData << entity
-                             } else {
-                                 myData << entity
-                             }
-                             return entity
-                         },
-                         run          : { it -> myData as QueryResults },
-                         delete       : { it -> myData.remove(0) },
-                         get          : { Key key -> myData.find { it -> it.key.getId() == key.getId() } }
-        ] as Datastore } as DatastoreProvider
+        dao.datastoreProvider = new TestDatastoreProvider()
         dao.dateFormatProvider = { -> dateFormat } as DateFormatProvider
     }
 

@@ -9,6 +9,7 @@ import com.google.cloud.datastore.StructuredQuery.Filter
 import com.google.cloud.datastore.StructuredQuery.PropertyFilter
 import com.trevorism.gcloud.bean.DatastoreProvider
 import com.trevorism.gcloud.bean.DateFormatProvider
+import com.trevorism.gcloud.bean.EntitySerializer
 import com.trevorism.gcloud.webapi.model.filtering.ComplexFilter
 import com.trevorism.gcloud.webapi.model.filtering.FilterConstants
 import com.trevorism.gcloud.webapi.model.filtering.SimpleFilter
@@ -24,6 +25,8 @@ class DatastoreFilterService implements FilterService{
     DateFormatProvider dateFormatProvider
     @Inject
     DatastoreProvider datastoreProvider
+    @Inject
+    EntitySerializer entitySerializer
 
     @Override
     def filter(ComplexFilter request, String kind) {
@@ -37,7 +40,7 @@ class DatastoreFilterService implements FilterService{
 
         def query = queryBuilder.build()
         def results = datastoreProvider.getDatastore().run(query)
-        new EntityList(results).toList()
+        new EntityList(entitySerializer, results).toList()
 
     }
 

@@ -62,9 +62,7 @@ class CrudDatastoreRepository implements DatastoreRepository {
     List<Map<String, Object>> readAll(String kind) {
         EntityQuery query = EntityQuery.newEntityQueryBuilder().setKind(kind).build()
         def results = datastoreProvider.getDatastore().run(query)
-        new EntityList(results).toList().collect {
-            entitySerializer.serialize(it)
-        }
+        new EntityList(entitySerializer, results).toList()
     }
 
     @Override

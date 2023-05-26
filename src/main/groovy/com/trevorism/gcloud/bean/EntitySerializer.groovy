@@ -1,6 +1,7 @@
 package com.trevorism.gcloud.bean
 
 import com.google.cloud.datastore.Entity
+import com.google.cloud.datastore.FullEntity
 import com.google.cloud.datastore.ValueType
 import jakarta.inject.Inject
 

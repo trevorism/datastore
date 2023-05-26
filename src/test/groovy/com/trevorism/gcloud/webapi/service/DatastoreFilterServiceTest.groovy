@@ -1,12 +1,14 @@
 package com.trevorism.gcloud.webapi.service
 
 import com.google.cloud.datastore.Datastore
+import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.FullEntity
 import com.google.cloud.datastore.KeyFactory
 import com.google.cloud.datastore.QueryResults
 import com.google.cloud.datastore.StructuredQuery
 import com.trevorism.gcloud.bean.DatastoreProvider
 import com.trevorism.gcloud.bean.DateFormatProvider
+import com.trevorism.gcloud.bean.EntitySerializer
 import com.trevorism.gcloud.webapi.model.filtering.ComplexFilter
 import com.trevorism.gcloud.webapi.model.filtering.FilterConstants
 import com.trevorism.gcloud.webapi.model.filtering.SimpleFilter
@@ -22,15 +24,16 @@ import java.time.ZoneOffset
 class DatastoreFilterServiceTest {
 
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    def keyFactory = new KeyFactory("trevorism")
 
     @Test
     void testFilter() {
+        keyFactory.kind = "testsample"
         DatastoreFilterService service = new DatastoreFilterService()
-        service.datastoreProvider = { ->
-            { q -> [FullEntity.newBuilder(), FullEntity.newBuilder()] as QueryResults } as Datastore
-        } as DatastoreProvider
+        service.datastoreProvider = new TestDatastoreProvider([Entity.newBuilder(keyFactory.newKey(3)).build(),
+                                                               Entity.newBuilder(keyFactory.newKey(4)).build()])
         service.dateFormatProvider = { -> dateFormat } as DateFormatProvider
-
+        service.entitySerializer = new EntitySerializer()
         String dateString = dateFormat.format(Date.from(LocalDateTime.of(2012,1,1,0,0,0).toInstant(ZoneOffset.UTC)))
 
         def results = service.filter(new ComplexFilter(type: FilterConstants.AND, simpleFilters: [
