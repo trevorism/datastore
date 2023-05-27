@@ -26,6 +26,7 @@ class CrudDatastoreRepository implements DatastoreRepository {
 
     @Override
     Map<String, Object> create(String kind, Map<String, Object> data) {
+        kind = kind.toLowerCase()
         validate(data)
         def toBeCreated = setEntityProperties(kind, data)
         Entity entity = datastoreProvider.getDatastore().put(toBeCreated)
@@ -49,6 +50,7 @@ class CrudDatastoreRepository implements DatastoreRepository {
 
     @Override
     Map<String, Object> read(String kind, long id) {
+        kind = kind.toLowerCase()
         Key key = datastoreProvider.getDatastore().newKeyFactory().setKind(kind).newKey(id)
         try {
             return entitySerializer.serialize(datastoreProvider.getDatastore().get(key))
@@ -60,6 +62,7 @@ class CrudDatastoreRepository implements DatastoreRepository {
 
     @Override
     List<Map<String, Object>> readAll(String kind) {
+        kind = kind.toLowerCase()
         EntityQuery query = EntityQuery.newEntityQueryBuilder().setKind(kind).build()
         def results = datastoreProvider.getDatastore().run(query)
         new EntityList(entitySerializer, results).toList()
@@ -67,6 +70,7 @@ class CrudDatastoreRepository implements DatastoreRepository {
 
     @Override
     Map<String, Object> update(String kind, long id, Map<String, Object> data) {
+        kind = kind.toLowerCase()
         Map<String, Object> entityExists = read(kind, id)
 
         if (!entityExists)
@@ -81,6 +85,7 @@ class CrudDatastoreRepository implements DatastoreRepository {
 
     @Override
     Map<String, Object> delete(String kind, long id) {
+        kind = kind.toLowerCase()
         Key key = datastoreProvider.getDatastore().newKeyFactory().setKind(kind).newKey(id)
         Map<String, Object> entity = read(kind, id)
         if (!entity)

@@ -57,6 +57,12 @@ class CrudDatastoreDAOTest {
     }
 
     @Test
+    void testSimpleUpperCase(){
+        def list = dao.readAll(kind.toUpperCase())
+        assert list
+    }
+
+    @Test
     void testReadAll() {
         def results = dao.readAll(kind)
         assert results.size() == 2

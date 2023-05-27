@@ -61,9 +61,10 @@ class EmptyDatabaseCrudDatastoreDAOTest {
         !result
     }
 
-    //@Test
+    @Test
     void testCreateSimple() {
         def jsonObject = [:]
+        jsonObject.put("id", 123412)
         jsonObject.put("name", "newName")
 
         def entity = dao.create(kind, jsonObject)

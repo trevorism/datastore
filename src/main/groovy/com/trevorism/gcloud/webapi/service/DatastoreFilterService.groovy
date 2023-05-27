@@ -30,7 +30,7 @@ class DatastoreFilterService implements FilterService{
 
     @Override
     def filter(ComplexFilter request, String kind) {
-        def queryBuilder = EntityQuery.Builder.newInstance().setKind(kind)
+        def queryBuilder = EntityQuery.newEntityQueryBuilder().setKind(kind)
 
         if(request?.simpleFilters || request?.complexFilters)
         {
