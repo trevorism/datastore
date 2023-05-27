@@ -5,6 +5,7 @@ import com.google.cloud.datastore.DatastoreOptions
 import io.micronaut.http.HttpRequest
 import io.micronaut.runtime.http.scope.RequestAware
 import io.micronaut.runtime.http.scope.RequestScope
+import io.micronaut.security.authentication.ServerAuthentication
 
 @RequestScope
 class DatastoreProvider implements RequestAware {
@@ -26,8 +27,8 @@ class DatastoreProvider implements RequestAware {
 
     @Override
     void setRequest(HttpRequest<?> request) {
-        Optional<String> wrappedTenant = request.getAttribute("tenant", String)
+        Optional<ServerAuthentication> wrappedTenant = request.getAttribute("micronaut.AUTHENTICATION", ServerAuthentication)
         if(wrappedTenant.isPresent())
-            tenant = wrappedTenant.get()
+            tenant = wrappedTenant.get()?.attributes?.get("tenant")
     }
 }
