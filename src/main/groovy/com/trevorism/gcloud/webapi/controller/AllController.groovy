@@ -36,7 +36,11 @@ class AllController {
 
         for(String namespace in getNamespaces()){
             def namespaceResult = DatastoreOptions.newBuilder().setNamespace(namespace).build().getService().run(query)
-            allResults.addAll(new EntityList(entitySerializer, namespaceResult).toList())
+            List<Map<String, Object>> objects = new EntityList(entitySerializer, namespaceResult).toList()
+            objects.each{
+                it.put("tenantId", namespace)
+            }
+            allResults.addAll(objects)
         }
 
         return allResults
