@@ -1,4 +1,12 @@
-# 1.8.0
+# 2.2.0
+
+Add an `all` controller, which allows visibility into data across tenants for administrative operations.
+
+# 2.1.0
+
+Enable multi-tenancy
+
+# 2.0.0
 
 Move to micronaut, java 17. Change the host to https://datastore.data.trevorism.com
 
