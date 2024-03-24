@@ -1,7 +1,5 @@
 package com.trevorism.gcloud.dao
 
-import com.google.cloud.datastore.*
-import com.trevorism.gcloud.bean.DatastoreProvider
 import com.trevorism.gcloud.bean.DateFormatProvider
 import com.trevorism.gcloud.webapi.service.CrudDatastoreRepository
 import com.trevorism.gcloud.webapi.service.TestDatastoreProvider

@@ -3,10 +3,7 @@ package com.trevorism.gcloud.webapi.controller
 import com.google.cloud.datastore.DatastoreOptions
 import com.google.cloud.datastore.EntityQuery
 import com.google.cloud.datastore.Query
-import com.trevorism.gcloud.bean.DatastoreProvider
-import com.trevorism.gcloud.bean.DateFormatProvider
 import com.trevorism.gcloud.bean.EntitySerializer
-import com.trevorism.gcloud.webapi.service.CrudDatastoreRepository
 import com.trevorism.gcloud.webapi.service.EntityList
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure

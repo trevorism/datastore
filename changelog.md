@@ -1,3 +1,7 @@
+# 2.3.0
+
+Update micronaut and dependency versions
+
 # 2.2.0
 
 Add an `all` controller, which allows visibility into data across tenants for administrative operations.

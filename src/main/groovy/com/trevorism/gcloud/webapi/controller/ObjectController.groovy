@@ -49,7 +49,7 @@ class ObjectController {
     }
 
     @Tag(name = "Object Operations")
-    @Operation(summary = "Get an object of type {kind} with id {id}")
+    @Operation(summary = "Get an object of type {kind} with id {id} **Secure")
     @Get(value = "{kind}/{id}", produces = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
     Map<String, Object> read(String kind, long id) {
@@ -61,7 +61,7 @@ class ObjectController {
     }
 
     @Tag(name = "Object Operations")
-    @Operation(summary = "Get all objects of type {kind}")
+    @Operation(summary = "Get all objects of type {kind} **Secure")
     @Get(value = "{kind}", produces = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
     List<Map<String, Object>> readAll(String kind) {
