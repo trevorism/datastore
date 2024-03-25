@@ -1,16 +1,8 @@
 package com.trevorism.gcloud.dao
 
-import com.google.cloud.datastore.Datastore
-import com.google.cloud.datastore.Entity
-import com.google.cloud.datastore.Key
-import com.google.cloud.datastore.KeyFactory
-import com.google.cloud.datastore.QueryResults
-import com.trevorism.gcloud.bean.DatastoreProvider
 import com.trevorism.gcloud.bean.DateFormatProvider
 import com.trevorism.gcloud.webapi.service.CrudDatastoreRepository
 import com.trevorism.gcloud.webapi.service.TestDatastoreProvider
-import io.micronaut.http.client.HttpClient
-import io.micronaut.http.client.annotation.Client
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.BeforeEach
