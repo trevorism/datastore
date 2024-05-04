@@ -6,6 +6,7 @@ import com.trevorism.gcloud.webapi.service.SortService
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
 import io.micronaut.http.MediaType
+import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import io.swagger.v3.oas.annotations.Operation
@@ -22,7 +23,7 @@ class SortController {
     @Operation(summary = "Perform a data operation and get a result **Secure")
     @Post(value = "/{kind}", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true)
-    def operate(String kind, ComplexSort complexSort) {
+    def operate(String kind, @Body ComplexSort complexSort) {
         sortService.sort(complexSort, kind)
     }
 

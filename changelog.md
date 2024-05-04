@@ -1,3 +1,7 @@
+# 2.4.0
+
+Update micronaut and dependency versions. Fix a bug with the sort controller.
+
 # 2.3.0
 
 Update micronaut and dependency versions
