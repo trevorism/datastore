@@ -1,3 +1,7 @@
+# 2.5.0
+
+Add deploy and acceptance test events
+
 # 2.4.0
 
 Update micronaut and dependency versions. Fix a bug with the sort controller.
