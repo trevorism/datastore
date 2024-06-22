@@ -3,6 +3,7 @@ package com.trevorism.gcloud.webapi.controller
 import com.google.cloud.datastore.Query
 import com.trevorism.gcloud.bean.DatastoreProvider
 import com.trevorism.gcloud.webapi.service.CrudDatastoreRepository
+import com.trevorism.secure.Permissions
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
 import io.micronaut.http.HttpStatus
@@ -36,6 +37,7 @@ class ObjectController {
     @Tag(name = "Object Operations")
     @Operation(summary = "Get all types")
     @Get(value = "/", produces = MediaType.APPLICATION_JSON)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.READ)
     List<String> getKinds() {
         def query = Query.newKeyQueryBuilder().setKind("__kind__").build()
         def results = datastoreProvider.datastore.run(query)
@@ -51,7 +53,7 @@ class ObjectController {
     @Tag(name = "Object Operations")
     @Operation(summary = "Get an object of type {kind} with id {id} **Secure")
     @Get(value = "{kind}/{id}", produces = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.READ)
     Map<String, Object> read(String kind, long id) {
         def entity = dao.read(kind, id)
         if (!entity)
@@ -63,7 +65,7 @@ class ObjectController {
     @Tag(name = "Object Operations")
     @Operation(summary = "Get all objects of type {kind} **Secure")
     @Get(value = "{kind}", produces = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.READ)
     List<Map<String, Object>> readAll(String kind) {
         def entities = dao.readAll(kind)
         return entities
@@ -73,7 +75,7 @@ class ObjectController {
     @Operation(summary = "Create an object of type {kind} **Secure")
     @Status(HttpStatus.CREATED)
     @Post(value = "{kind}", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.CREATE)
     Map<String, Object> create(String kind, @Body Map<String, Object> data) {
         try {
             def entity = dao.create(kind, data)
@@ -87,7 +89,7 @@ class ObjectController {
     @Tag(name = "Object Operations")
     @Operation(summary = "Update an object of type {kind} with id {id} **Secure")
     @Put(value = "{kind}/{id}", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.UPDATE)
     Map<String, Object> update(String kind, long id, @Body Map<String, Object> data) {
         def entity = dao.update(kind, id, data)
         if (!entity)
@@ -98,7 +100,7 @@ class ObjectController {
     @Tag(name = "Object Operations")
     @Operation(summary = "Delete an object of type {kind} with id {id} **Secure")
     @Delete(value = "{kind}/{id}", produces = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.DELETE)
     Map<String, Object> delete(String kind, long id) {
         def entity = dao.delete(kind, id)
         if (!entity)

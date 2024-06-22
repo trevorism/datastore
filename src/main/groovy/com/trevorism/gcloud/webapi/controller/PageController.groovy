@@ -3,6 +3,7 @@ package com.trevorism.gcloud.webapi.controller
 import com.trevorism.gcloud.webapi.model.paging.Page
 import com.trevorism.gcloud.webapi.service.DatastorePagingService
 import com.trevorism.gcloud.webapi.service.PagingService
+import com.trevorism.secure.Permissions
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
 import io.micronaut.http.MediaType
@@ -23,7 +24,7 @@ class PageController {
     @Tag(name = "Page Operations")
     @Operation(summary = "Perform a data operation and get a result **Secure")
     @Post(value = "/{kind}", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.READ)
     def operate(String kind, @Body Page paging){
         pagingService.page(paging, kind)
     }

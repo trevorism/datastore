@@ -1,3 +1,7 @@
+# 2.6.0
+
+Add fine grained permissions to endpoints.
+
 # 2.5.0
 
 Add deploy and acceptance test events

@@ -4,7 +4,7 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/trevorism/datastore)
 ![GitHub top language](https://img.shields.io/github/languages/top/trevorism/datastore)
 
-Latest Version: 2.5.0
+Latest Version: 2.6.0
 
 CRUD operations on objects via a REST API.
 

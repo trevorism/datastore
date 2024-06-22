@@ -5,6 +5,7 @@ import com.google.cloud.datastore.EntityQuery
 import com.google.cloud.datastore.Query
 import com.trevorism.gcloud.bean.EntitySerializer
 import com.trevorism.gcloud.webapi.service.EntityList
+import com.trevorism.secure.Permissions
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
 import io.micronaut.http.MediaType
@@ -23,7 +24,7 @@ class AllController {
     @Tag(name = "Get All Operations")
     @Operation(summary = "Get all objects of type {kind} in all namespaces **Secure")
     @Get(value = "{kind}", produces = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.SYSTEM)
+    @Secure(value = Roles.SYSTEM, permissions = Permissions.READ)
     List<Map<String, Object>> readAll(String kind) {
         List<Map<String, Object>> allResults = []
         kind = kind.toLowerCase()
