@@ -1,3 +1,7 @@
+# 2.6.1
+
+Update dependencies.
+
 # 2.6.0
 
 Add fine grained permissions to endpoints.

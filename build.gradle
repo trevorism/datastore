@@ -55,7 +55,7 @@ dependencies {
         exclude module:"slf4j-nop"
     }
 
-    implementation 'com.trevorism:micronaut-security-utils:2.1.0'
+    implementation 'com.trevorism:micronaut-security-utils:2.2.0'
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.google.cloud:google-cloud-datastore:2.20.1'
 
@@ -64,6 +64,7 @@ dependencies {
     acceptanceImplementation 'io.cucumber:cucumber-groovy:6.10.4'
     acceptanceImplementation 'com.trevorism:secure-http-utils:2.1.0'
     acceptanceImplementation 'com.google.code.gson:gson:2.11.0'
+    acceptanceImplementation 'ch.qos.logback:logback-classic:1.5.6'
 }
 
 application {
@@ -89,7 +90,7 @@ appengine {
     stage.artifact = layout.buildDirectory.file("libs/${project.name}-all.jar")
     deploy {
         projectId = "trevorism-data"
-        version = "2-6-0"
+        version = "2-6-1"
         stopPreviousVersion = true
         promote = true
     }

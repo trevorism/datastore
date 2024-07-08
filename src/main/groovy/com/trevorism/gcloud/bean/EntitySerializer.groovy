@@ -1,7 +1,6 @@
 package com.trevorism.gcloud.bean
 
 import com.google.cloud.datastore.Entity
-import com.google.cloud.datastore.FullEntity
 import com.google.cloud.datastore.ValueType
 import jakarta.inject.Inject
 
@@ -9,7 +8,7 @@ import jakarta.inject.Inject
 class EntitySerializer {
 
     @Inject
-    DateFormatProvider dataFormatProvider
+    DateFormatProvider dateFormatProvider
 
     Map<String, Object> serialize(Entity entity) {
         Map<String, Object> map = [:]
@@ -19,7 +18,7 @@ class EntitySerializer {
 
         entity.getNames().each { name ->
             if (entity.getValue(name).getType() == ValueType.TIMESTAMP)
-                map.put(name, dataFormatProvider.dateFormat.format(entity.getValue(name).get().toDate()))
+                map.put(name, dateFormatProvider.dateFormat.format(entity.getValue(name).get().toDate()))
             else
                 map.put(name, entity.getValue(name).get())
         }

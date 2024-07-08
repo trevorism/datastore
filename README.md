@@ -4,8 +4,6 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/trevorism/datastore)
 ![GitHub top language](https://img.shields.io/github/languages/top/trevorism/datastore)
 
-Latest Version: 2.6.0
-
 CRUD operations on objects via a REST API.
 
 Objects have the following rules for creation:
@@ -20,7 +18,6 @@ Supports filtering, sorting, and paging. These are subject to the limitations of
 certain operations may fail on unindexed columns. For a full in memory implementation of these operations, see [Trevorism Data](https://github.com/trevorism/data)
 
 Deployed at [Datastore](https://datastore.data.trevorism.com)
-
 
 
 ## Backup documentation
