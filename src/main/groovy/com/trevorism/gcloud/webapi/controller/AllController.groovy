@@ -24,7 +24,7 @@ class AllController {
     @Tag(name = "Get All Operations")
     @Operation(summary = "Get all objects of type {kind} in all namespaces **Secure")
     @Get(value = "{kind}", produces = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.SYSTEM, permissions = Permissions.READ)
+    @Secure(value = Roles.SYSTEM, authorizeAudience = true, permissions = Permissions.READ)
     List<Map<String, Object>> readAll(String kind) {
         List<Map<String, Object>> allResults = []
         kind = kind.toLowerCase()

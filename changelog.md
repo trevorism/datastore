@@ -1,3 +1,7 @@
+# 2.6.2
+
+Add authorize audience to all controller.
+
 # 2.6.1
 
 Update dependencies.
