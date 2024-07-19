@@ -1,3 +1,7 @@
+# 2.7.0
+
+Attempting always on for this API.
+
 # 2.6.2
 
 Add authorize audience to all controller.

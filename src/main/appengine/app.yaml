@@ -1,6 +1,10 @@
 runtime: java17
 service: datastore
 entrypoint: java -jar datastore-all.jar
+
+automatic_scaling:
+  min_idle_instances: 1
+
 handlers:
   - url: /.*
     secure: always
