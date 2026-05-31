@@ -1,4 +1,4 @@
-runtime: java17
+runtime: java25
 service: datastore
 entrypoint: java -jar datastore-all.jar
 
