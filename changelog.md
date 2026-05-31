@@ -1,3 +1,7 @@
+# 2.9.0
+
+Upgrade to Micronaut 5 and Java 25.
+
 # 2.8.0
 
 Update dependencies and fix always on for this API.
