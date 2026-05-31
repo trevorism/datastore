@@ -3,7 +3,7 @@ package com.trevorism.gcloud
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import com.trevorism.https.DefaultSecureHttpClient
+import com.trevorism.https.AppClientSecureHttpClient
 import com.trevorism.https.SecureHttpClient
 
 
@@ -14,7 +14,7 @@ class DatastoreRestClient {
 
     public static final String BASE_URL = "https://datastore.data.trevorism.com"
 
-    SecureHttpClient client = new DefaultSecureHttpClient()
+    SecureHttpClient client = new AppClientSecureHttpClient()
     Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create()
 
 
