@@ -1,7 +1,9 @@
 runtime: java25
 service: datastore
-entrypoint: java --enable-native-access=ALL-UNNAMED -jar datastore-all.jar
+entrypoint: java -jar datastore-all.jar
+
 env_variables:
+  OTEL_METRICS_EXPORTER: "none"
   DATASTORE_ENABLE_METRICS: "false"
 
 automatic_scaling:

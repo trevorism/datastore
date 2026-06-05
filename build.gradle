@@ -55,7 +55,7 @@ dependencies {
         exclude module:"slf4j-nop"
     }
 
-    implementation 'com.trevorism:micronaut-security-utils:2.3.3'
+    implementation 'com.trevorism:micronaut-security-utils:2.4.0'
     implementation 'com.google.code.gson:gson:2.14.0'
     implementation 'com.google.cloud:google-cloud-datastore:3.0.0'
     implementation 'com.google.auth:google-auth-library-oauth2-http:1.47.0'
