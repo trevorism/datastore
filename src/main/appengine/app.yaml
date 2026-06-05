@@ -1,6 +1,8 @@
 runtime: java25
 service: datastore
-entrypoint: java -jar datastore-all.jar
+entrypoint: java --enable-native-access=ALL-UNNAMED -jar datastore-all.jar
+env_variables:
+  DATASTORE_ENABLE_METRICS: "false"
 
 automatic_scaling:
   min_instances: 1
