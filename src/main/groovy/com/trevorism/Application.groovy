@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory
 @OpenAPIDefinition(
         info = @Info(
                 title = "Datastore API",
-                version = "2.9.1",
+                version = "3.0.0",
                 description = "Wraps google datastore and conforms to the Trevorism Data interface",
                 contact = @Contact(url = "https://trevorism.com", name = "Trevor Brooks", email = "tbrooks@trevorism.com")
         )
@@ -25,6 +25,5 @@ class Application {
     static void main(String[] args) {
         log.info("Started Datastore app.")
         Micronaut.run(Application, args)
-        GlobalOpenTelemetry.set(OpenTelemetry.noop())
     }
 }
