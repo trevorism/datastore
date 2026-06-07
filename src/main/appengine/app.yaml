@@ -2,11 +2,6 @@ runtime: java25
 service: datastore
 entrypoint: java -jar datastore-all.jar
 
-env_variables:
-  OTEL_JAVAAGENT_ENABLED: "false"
-  OTEL_SDK_DISABLED: "true"
-  OTEL_METRICS_EXPORTER: "none"
-
 automatic_scaling:
   min_instances: 1
 
