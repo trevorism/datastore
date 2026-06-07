@@ -1,3 +1,7 @@
+# 2.9.2
+
+Exclude OpenTelemetry autoconfigure from google-cloud-datastore to fix GlobalOpenTelemetry.set already called error after Micronaut 5 upgrade.
+
 # 2.9.1
 
 Attempting to stop metric tracing which is erroring and noisy.

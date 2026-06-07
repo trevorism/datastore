@@ -6,8 +6,6 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.runtime.http.scope.RequestAware
 import io.micronaut.runtime.http.scope.RequestScope
 import io.micronaut.security.authentication.ServerAuthentication
-import io.opentelemetry.api.GlobalOpenTelemetry
-import io.opentelemetry.api.OpenTelemetry
 
 @RequestScope
 class DatastoreProvider implements RequestAware {
@@ -17,7 +15,6 @@ class DatastoreProvider implements RequestAware {
 
     Datastore getDatastore() {
         if (!datastore) {
-            GlobalOpenTelemetry.set(OpenTelemetry.noop())
             if(tenant){
                 datastore = DatastoreOptions.newBuilder().setNamespace(tenant).build().getService()
             }
