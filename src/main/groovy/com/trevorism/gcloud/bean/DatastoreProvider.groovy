@@ -17,7 +17,6 @@ class DatastoreProvider implements RequestAware {
 
     Datastore getDatastore() {
         if (!datastore) {
-            GlobalOpenTelemetry.set(OpenTelemetry.noop())
             if(tenant){
                 datastore = DatastoreOptions.newBuilder().setNamespace(tenant).build().getService()
             }

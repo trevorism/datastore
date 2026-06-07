@@ -2,6 +2,8 @@ package com.trevorism
 
 import groovy.transform.CompileStatic
 import io.micronaut.runtime.Micronaut
+import io.opentelemetry.api.GlobalOpenTelemetry
+import io.opentelemetry.api.OpenTelemetry
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.info.Contact
 import io.swagger.v3.oas.annotations.info.Info
@@ -23,5 +25,6 @@ class Application {
     static void main(String[] args) {
         log.info("Started Datastore app.")
         Micronaut.run(Application, args)
+        GlobalOpenTelemetry.set(OpenTelemetry.noop())
     }
 }
