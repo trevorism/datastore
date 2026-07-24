@@ -12,7 +12,7 @@ import com.trevorism.https.SecureHttpClient
  */
 class DatastoreRestClient {
 
-    public static final String BASE_URL = "https://datastore.data.trevorism.com"
+    public static final String BASE_URL = System.getenv("ACCEPTANCE_BASE_URL") ?: "https://datastore.data.trevorism.com"
 
     SecureHttpClient client = new AppClientSecureHttpClient()
     Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create()
