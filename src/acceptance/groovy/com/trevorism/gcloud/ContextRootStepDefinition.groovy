@@ -2,25 +2,26 @@ package com.trevorism.gcloud
 this.metaClass.mixin(io.cucumber.groovy.Hooks)
 this.metaClass.mixin(io.cucumber.groovy.EN)
 
+String baseUrl = System.getenv("ACCEPTANCE_BASE_URL") ?: "https://datastore.data.trevorism.com"
 def contextRootContent
 def pingContent
 
 Given(~/^the datastore application is alive$/) { ->
     try{
-        new URL("https://datastore.data.trevorism.com/ping").text
+        new URL("${baseUrl}/ping").text
     }
     catch (Exception ignored){
         Thread.sleep(10000)
-        new URL("https://datastore.data.trevorism.com/ping").text
+        new URL("${baseUrl}/ping").text
     }
 }
 
 When(~/^I navigate to "([^"]*)"$/) { String url ->
-    contextRootContent = new URL(url).text
+    contextRootContent = new URL(baseUrl).text
 }
 
 When(~/^I navigate to \/ping on "([^"]*)"$/) { String url ->
-    pingContent = new URL("${url}/ping").text
+    pingContent = new URL("${baseUrl}/ping").text
 }
 
 Then(~/^the API returns a link to the help page$/) { ->
