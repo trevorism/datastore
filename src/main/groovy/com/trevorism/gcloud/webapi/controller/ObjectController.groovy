@@ -2,7 +2,7 @@ package com.trevorism.gcloud.webapi.controller
 
 import com.google.cloud.datastore.Query
 import com.trevorism.gcloud.bean.DatastoreProvider
-import com.trevorism.gcloud.webapi.service.CrudDatastoreRepository
+import com.trevorism.gcloud.webapi.service.DatastoreRepository
 import com.trevorism.secure.Permissions
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
@@ -19,17 +19,13 @@ import io.micronaut.http.exceptions.HttpStatusException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 
 @Controller("/object")
 class ObjectController {
 
-    private static final Logger log = LoggerFactory.getLogger(ObjectController.class.name)
-
     @Inject
-    CrudDatastoreRepository dao
+    DatastoreRepository dao
 
     @Inject
     DatastoreProvider datastoreProvider
@@ -77,13 +73,7 @@ class ObjectController {
     @Post(value = "{kind}", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
     @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.CREATE)
     Map<String, Object> create(String kind, @Body Map<String, Object> data) {
-        try {
-            def entity = dao.create(kind, data)
-            return entity
-        } catch (Exception e) {
-            log.error("Unable to create ${kind}", e)
-            throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unable to create ${kind}")
-        }
+        return dao.create(kind, data)
     }
 
     @Tag(name = "Object Operations")

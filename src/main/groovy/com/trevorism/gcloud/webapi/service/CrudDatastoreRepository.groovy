@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder
 import com.trevorism.gcloud.bean.DatastoreProvider
 import com.trevorism.gcloud.bean.DateFormatProvider
 import com.trevorism.gcloud.bean.EntitySerializer
+import com.trevorism.gcloud.webapi.model.exception.InvalidEntityException
 import jakarta.inject.Inject
 
 import java.util.logging.Logger
@@ -34,17 +35,24 @@ class CrudDatastoreRepository implements DatastoreRepository {
     }
 
     private static void validate(Map<String, Object> jsonObject) {
-        if (jsonObject.containsKey("key"))
-            throw new RuntimeException("Invalid object definition. Object cannot have a 'key' column")
+        rejectKeyColumn(jsonObject)
+        rejectNonNumericId(jsonObject)
+    }
 
-        if (!jsonObject["id"])
+    private static void rejectKeyColumn(Map<String, Object> jsonObject) {
+        if (jsonObject.containsKey("key"))
+            throw new InvalidEntityException("Invalid object definition. Object cannot have a 'key' column")
+    }
+
+    private static void rejectNonNumericId(Map<String, Object> jsonObject) {
+        def id = jsonObject["id"]
+        if (id == null)
             return
 
-        def id = jsonObject["id"]
         try {
             Long.parseLong(id.toString())
         } catch (Exception e) {
-            throw new RuntimeException("Invalid ID. ID must be a number instead of: ${id}", e)
+            throw new InvalidEntityException("Invalid ID. ID must be a number instead of: ${id}", e)
         }
     }
 
@@ -71,6 +79,7 @@ class CrudDatastoreRepository implements DatastoreRepository {
     @Override
     Map<String, Object> update(String kind, long id, Map<String, Object> data) {
         kind = kind.toLowerCase()
+        rejectKeyColumn(data)
         Map<String, Object> entityExists = read(kind, id)
 
         if (!entityExists)
