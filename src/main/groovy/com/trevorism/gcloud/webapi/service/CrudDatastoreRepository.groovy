@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder
 import com.trevorism.gcloud.bean.DatastoreProvider
 import com.trevorism.gcloud.bean.DateFormatProvider
 import com.trevorism.gcloud.bean.EntitySerializer
+import com.trevorism.gcloud.webapi.model.InvalidEntityException
 import jakarta.inject.Inject
 
 import java.util.logging.Logger
@@ -35,7 +36,7 @@ class CrudDatastoreRepository implements DatastoreRepository {
 
     private static void validate(Map<String, Object> jsonObject) {
         if (jsonObject.containsKey("key"))
-            throw new RuntimeException("Invalid object definition. Object cannot have a 'key' column")
+            throw new InvalidEntityException("Invalid object definition. Object cannot have a 'key' column")
 
         if (!jsonObject["id"])
             return
@@ -44,7 +45,7 @@ class CrudDatastoreRepository implements DatastoreRepository {
         try {
             Long.parseLong(id.toString())
         } catch (Exception e) {
-            throw new RuntimeException("Invalid ID. ID must be a number instead of: ${id}", e)
+            throw new InvalidEntityException("Invalid ID. ID must be a number instead of: ${id}", e)
         }
     }
 

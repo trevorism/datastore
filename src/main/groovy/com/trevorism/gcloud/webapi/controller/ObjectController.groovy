@@ -2,6 +2,7 @@ package com.trevorism.gcloud.webapi.controller
 
 import com.google.cloud.datastore.Query
 import com.trevorism.gcloud.bean.DatastoreProvider
+import com.trevorism.gcloud.webapi.model.InvalidEntityException
 import com.trevorism.gcloud.webapi.service.CrudDatastoreRepository
 import com.trevorism.secure.Permissions
 import com.trevorism.secure.Roles
@@ -80,6 +81,9 @@ class ObjectController {
         try {
             def entity = dao.create(kind, data)
             return entity
+        } catch (InvalidEntityException e) {
+            log.warn("Rejected invalid ${kind}: ${e.message}")
+            throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
         } catch (Exception e) {
             log.error("Unable to create ${kind}", e)
             throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unable to create ${kind}")
