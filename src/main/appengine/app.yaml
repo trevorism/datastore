@@ -5,9 +5,6 @@ entrypoint: java -jar datastore-all.jar
 automatic_scaling:
   min_instances: 1
 
-inbound_services:
-  - warmup
-
 handlers:
   - url: /.*
     secure: always

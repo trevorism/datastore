@@ -1,3 +1,7 @@
+# 3.2.0
+
+Remove warmup endpoint. Update the cloud datastore dependency.
+
 # 3.1.0
 
 Fix simple date format issue, and large list/map serialization issue. Update dependencies.
