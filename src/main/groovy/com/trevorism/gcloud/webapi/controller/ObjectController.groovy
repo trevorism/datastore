@@ -61,7 +61,7 @@ class ObjectController {
     @Tag(name = "Object Operations")
     @Operation(summary = "Get all objects of type {kind} **Secure")
     @Get(value = "{kind}", produces = MediaType.APPLICATION_JSON)
-        @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.READ)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.READ)
     List<Map<String, Object>> readAll(String kind) {
         def entities = dao.readAll(kind)
         return entities
