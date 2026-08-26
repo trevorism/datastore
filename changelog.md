@@ -1,6 +1,6 @@
-# 3.1.1
+# 3.2.0
 
-Remove warmup endpoint.
+Remove warmup endpoint. Update the cloud datastore dependency.
 
 # 3.1.0
 
