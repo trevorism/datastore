@@ -21,11 +21,26 @@ Deployed at [Datastore](https://datastore.data.trevorism.com)
 
 
 ## Backup documentation
+
+The datastore lives in the `trevorism-data` project, in the `(default)` database at `us-east4`.
+The backup bucket must be in the same location as the database or the export fails.
+
+Create the bucket once:
 ```
-$Bucket = "gs://trevorism-gcloud-backup"
-gcloud config set project trevorism-gcloud
+gcloud storage buckets create gs://trevorism-data-backup --project=trevorism-data --location=us-east4
+```
+
+Then export:
+```
+$Bucket = "gs://trevorism-data-backup"
+gcloud config set project trevorism-data
 gcloud datastore export $Bucket
 
 -or-
 gcloud datastore export --kinds="KIND1,KIND2" $Bucket
+```
+
+Exports are long running. Add `--async` and track progress with:
+```
+gcloud datastore operations list --project=trevorism-data
 ```

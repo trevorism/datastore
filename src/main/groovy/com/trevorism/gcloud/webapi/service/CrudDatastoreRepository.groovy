@@ -16,6 +16,7 @@ import java.util.logging.Logger
 class CrudDatastoreRepository implements DatastoreRepository {
 
     private static final Logger log = Logger.getLogger(CrudDatastoreRepository.class.name)
+    private static final int MAX_INDEXED_STRING_BYTES = 1500
     private final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create()
 
     @Inject
@@ -112,16 +113,26 @@ class CrudDatastoreRepository implements DatastoreRepository {
     private FullEntity<IncompleteKey> setEntityProperties(IncompleteKey key, Map<String, Object> data) {
         def builder = FullEntity.newBuilder(key)
         data.each { k, v ->
+            boolean flattened = false
             if (v instanceof List || v instanceof Map) {
                 v = gson.toJson(v)
+                flattened = true
             }
             if (isParseableToDate(v)) {
                 Date date = parseDate(v)
                 v = Timestamp.of(date)
             }
-            builder.set(k.toLowerCase(), v)
+            String name = k.toLowerCase()
+            if (v instanceof String && (flattened || exceedsIndexableLength(v)))
+                builder.set(name, StringValue.newBuilder(v).setExcludeFromIndexes(true).build())
+            else
+                builder.set(name, v)
         }
         return builder.build()
+    }
+
+    private static boolean exceedsIndexableLength(String value) {
+        return value.getBytes("UTF-8").length > MAX_INDEXED_STRING_BYTES
     }
 
     private IncompleteKey createEntityKey(String kind, Map<String, Object> data) {
