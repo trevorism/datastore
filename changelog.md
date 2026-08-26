@@ -1,3 +1,7 @@
+# 3.1.0
+
+Fix simple date format issue, and large list/map serialization issue. Update dependencies.
+
 # 3.0.0 
 
 Found the issue with metric tracing and have removed it. This should stop the noisy errors in the logs.
