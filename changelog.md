@@ -1,3 +1,7 @@
+# 3.1.1
+
+Remove warmup endpoint.
+
 # 3.1.0
 
 Fix simple date format issue, and large list/map serialization issue. Update dependencies.
