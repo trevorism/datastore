@@ -1,14 +1,15 @@
 package com.trevorism.gcloud.bean
 
+import com.google.cloud.NoCredentials
 import com.google.cloud.datastore.Datastore
+import com.google.cloud.datastore.DatastoreOptions
+import com.google.cloud.http.HttpTransportOptions
 import org.junit.jupiter.api.Test
-
-import java.util.function.Function
 
 class DatastoreClientCacheTest {
 
     private int clientsCreated = 0
-    private final Function<String, Datastore> countingFactory = { String namespace ->
+    private final Closure<Datastore> countingFactory = { String namespace ->
         clientsCreated++
         [toString: { -> "datastore:$namespace".toString() }] as Datastore
     }
@@ -44,5 +45,28 @@ class DatastoreClientCacheTest {
 
         assert fromNull.is(fromEmpty)
         assert clientsCreated == 1
+    }
+
+    @Test
+    void testNamespacedClientUsesHttpTransport() {
+        DatastoreOptions options = buildOptions("acme")
+
+        assert options.transportOptions instanceof HttpTransportOptions
+        assert options.namespace == "acme"
+    }
+
+    @Test
+    void testDefaultClientUsesHttpTransport() {
+        DatastoreOptions options = buildOptions(null)
+
+        assert options.transportOptions instanceof HttpTransportOptions
+        assert options.namespace == ""
+    }
+
+    private static DatastoreOptions buildOptions(String namespace) {
+        DatastoreClientCache.httpOptionsForNamespace(namespace)
+                .setProjectId("test-project")
+                .setCredentials(NoCredentials.getInstance())
+                .build()
     }
 }

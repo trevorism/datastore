@@ -1,3 +1,7 @@
+# 3.2.2
+
+Pin the datastore client to the HTTP transport. Version 3.x of the client library switched the default to gRPC, whose netty direct-memory pools and thread pools pushed the F1 instance past its 384 MiB limit after roughly 100 requests. Also route the cross-namespace read through the shared client cache instead of creating unclosed clients per call.
+
 # 3.2.1
 
 Reuse one datastore client per tenant namespace instead of creating a new client on every request. Fixes instances running out of memory after roughly 100 requests.
