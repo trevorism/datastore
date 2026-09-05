@@ -1,8 +1,8 @@
 package com.trevorism.gcloud.webapi.controller
 
-import com.google.cloud.datastore.DatastoreOptions
 import com.google.cloud.datastore.EntityQuery
 import com.google.cloud.datastore.Query
+import com.trevorism.gcloud.bean.DatastoreClientCache
 import com.trevorism.gcloud.bean.EntitySerializer
 import com.trevorism.gcloud.webapi.service.EntityList
 import com.trevorism.secure.Permissions
@@ -20,6 +20,8 @@ class AllController {
 
     @Inject
     EntitySerializer entitySerializer
+    @Inject
+    DatastoreClientCache datastoreClientCache
 
     @Tag(name = "Get All Operations")
     @Operation(summary = "Get all objects of type {kind} in all namespaces **Secure")
@@ -29,11 +31,11 @@ class AllController {
         List<Map<String, Object>> allResults = []
         kind = kind.toLowerCase()
         EntityQuery query = EntityQuery.newEntityQueryBuilder().setKind(kind).build()
-        def results = DatastoreOptions.getDefaultInstance().getService().run(query)
+        def results = datastoreClientCache.datastoreForNamespace(null).run(query)
         allResults.addAll(new EntityList(entitySerializer, results).toList())
 
         for(String namespace in getNamespaces()){
-            def namespaceResult = DatastoreOptions.newBuilder().setNamespace(namespace).build().getService().run(query)
+            def namespaceResult = datastoreClientCache.datastoreForNamespace(namespace).run(query)
             List<Map<String, Object>> objects = new EntityList(entitySerializer, namespaceResult).toList()
             objects.each{
                 it.put("tenantId", namespace)
@@ -44,9 +46,9 @@ class AllController {
         return allResults
     }
 
-    private static List getNamespaces() {
+    private List getNamespaces() {
         def query = Query.newKeyQueryBuilder().setKind("__namespace__").build()
-        def results = DatastoreOptions.getDefaultInstance().getService().run(query)
+        def results = datastoreClientCache.datastoreForNamespace(null).run(query)
         def list = []
         while (results.hasNext()) {
             String name = results.next().getName()

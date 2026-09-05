@@ -6,7 +6,6 @@ import jakarta.inject.Inject
 import jakarta.inject.Singleton
 
 import java.util.concurrent.ConcurrentHashMap
-import java.util.function.Function
 
 @Singleton
 class DatastoreClientCache {
@@ -14,14 +13,14 @@ class DatastoreClientCache {
     private static final String DEFAULT_NAMESPACE = ""
 
     private final ConcurrentHashMap<String, Datastore> clientsByNamespace = new ConcurrentHashMap<>()
-    private final Function<String, Datastore> clientFactory
+    private final Closure<Datastore> clientFactory
 
     @Inject
     DatastoreClientCache() {
-        this(DatastoreClientCache::createClient)
+        this({ String namespace -> httpOptionsForNamespace(namespace).build().getService() })
     }
 
-    DatastoreClientCache(Function<String, Datastore> clientFactory) {
+    DatastoreClientCache(Closure<Datastore> clientFactory) {
         this.clientFactory = clientFactory
     }
 
@@ -29,10 +28,11 @@ class DatastoreClientCache {
         clientsByNamespace.computeIfAbsent(namespace ?: DEFAULT_NAMESPACE, clientFactory)
     }
 
-    private static Datastore createClient(String namespace) {
+    static DatastoreOptions.Builder httpOptionsForNamespace(String namespace) {
+        DatastoreOptions.Builder builder = DatastoreOptions.newBuilder().setTransportOptions(DatastoreOptions.getDefaultHttpTransportOptions())
         if (namespace) {
-            return DatastoreOptions.newBuilder().setNamespace(namespace).build().getService()
+            builder.setNamespace(namespace)
         }
-        return DatastoreOptions.getDefaultInstance().getService()
+        return builder
     }
 }

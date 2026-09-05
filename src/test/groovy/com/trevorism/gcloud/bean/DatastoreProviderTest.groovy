@@ -5,12 +5,10 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.security.authentication.ServerAuthentication
 import org.junit.jupiter.api.Test
 
-import java.util.function.Function
-
 class DatastoreProviderTest {
 
     private final List<String> requestedNamespaces = []
-    private final Function<String, Datastore> recordingFactory = { String namespace ->
+    private final Closure<Datastore> recordingFactory = { String namespace ->
         requestedNamespaces << namespace
         [toString: { -> "datastore:$namespace".toString() }] as Datastore
     }
