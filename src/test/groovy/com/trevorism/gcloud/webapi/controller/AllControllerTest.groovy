@@ -31,11 +31,12 @@ class AllControllerTest {
 
     @Test
     void testReadAllSkipsTheUnnamedDefaultNamespaceKey() {
-        AllController controller = controllerWith(["": []], [])
+        AllController controller = controllerWith(["": [widget(1, "default-one")]], [])
 
-        controller.readAll("widget")
+        List<Map<String, Object>> results = controller.readAll("widget")
 
-        assert namespacesRequested.every { it == "" }
+        assert results*.name == ["default-one"]
+        assert namespacesRequested.count("") == 1
     }
 
     @Test
